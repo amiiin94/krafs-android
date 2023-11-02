@@ -752,7 +752,8 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.25"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:id="@+id/navforum">
 
                     <ImageView
                         android:layout_width="wrap_content"
