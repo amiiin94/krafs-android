@@ -43,6 +43,8 @@
 
             <!-- Include any intent filters or other activity properties as needed -->
         </activity>
+
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
