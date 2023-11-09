@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="30dp"
         android:layout_marginTop="50dp"
-        app:cardBackgroundColor="@color/abubg"
+        app:cardBackgroundColor="@color/abu"
         app:cardCornerRadius="20dp"
         app:layout_constraintBottom_toTopOf="@+id/cv2"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="30dp"
         android:layout_marginTop="100dp"
-        app:cardBackgroundColor="@color/abubg"
+        app:cardBackgroundColor="@color/abu"
         app:cardCornerRadius="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -87,10 +87,11 @@
                 android:paddingHorizontal="20dp">
 
                 <EditText
-                    android:layout_width="250dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:layout_marginTop="10dp"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginEnd="5dp"
                     android:background="@drawable/bget"
                     android:hint="Password"
                     android:padding="10dp"
@@ -98,8 +99,10 @@
                     android:textColorHint="@color/abu" />
 
                 <ImageButton
-                    android:layout_width="match_parent"
+                    android:layout_width="43dp"
                     android:layout_height="43dp"
+                    android:maxWidth="43dp"
+                    android:maxHeight="43dp"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/bget"
                     android:src="@drawable/baseline_visibility_24" />

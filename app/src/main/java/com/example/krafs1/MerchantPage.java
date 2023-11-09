@@ -44,6 +44,8 @@ public class MerchantPage extends AppCompatActivity {
                 startActivity(profileIntent);
             }
         });
+
+
         // Add any code specific to this activity here
     }
 }
