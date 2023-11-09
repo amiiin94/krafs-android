@@ -4,5 +4,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="main_brown">#6B4C35</color>
     <color name="abu">#8C8A8A</color>
+    <color name="abu2">#30FFFFFF</color>
     <color name="abubg">#30FFFFFF</color>
 </resources>
