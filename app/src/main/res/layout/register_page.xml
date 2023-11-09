@@ -75,6 +75,19 @@
                     android:textStyle="bold"></TextView>
 
                 <EditText
+                    android:id="@+id/username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:layout_marginTop="25dp"
+                    android:background="@drawable/bget"
+                    android:hint="Username"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/abu"></EditText>
+
+                <EditText
+                    android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
@@ -85,12 +98,25 @@
                     android:textColor="@color/black"
                     android:textColorHint="@color/abu"></EditText>
 
+                <EditText
+                    android:id="@+id/notlp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:layout_marginTop="25dp"
+                    android:background="@drawable/bget"
+                    android:hint="No. Telphone"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/abu"></EditText>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="20dp">
 
                     <EditText
+                        android:id="@+id/password"
                         android:layout_width="250dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
