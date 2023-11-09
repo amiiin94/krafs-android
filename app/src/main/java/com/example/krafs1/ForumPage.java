@@ -11,4 +11,6 @@ public class ForumPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.forum_page);
     }
+
+
 }
