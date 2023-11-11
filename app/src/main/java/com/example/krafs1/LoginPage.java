@@ -3,6 +3,7 @@ package com.example.krafs1;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,9 +18,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.text.NumberFormat;
 import java.util.Currency;
@@ -47,15 +50,21 @@ public class LoginPage extends AppCompatActivity {
     }
 
     public void login() {
+        String hashedPassword = BCrypt.hashpw(password.getText().toString(), BCrypt.gensalt());
+
         String urlEndPoints = "https://ap-southeast-1.aws.data.mongodb-api.com/app/application-0-iyoxv/endpoint/getUserbyemailandPassword?email=" + email.getText().toString() + "&password=" + password.getText().toString();
 
         StringRequest sr = new StringRequest(
                 Request.Method.GET,
                 urlEndPoints,
+
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        Log.d("LoginPage", "Raw Server Response: " + response);
+
                         try {
+
                             JSONObject userJson = new JSONObject(response);
 
                             String username = userJson.getString("username");

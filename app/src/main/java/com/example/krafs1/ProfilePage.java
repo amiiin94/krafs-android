@@ -2,10 +2,14 @@ package com.example.krafs1;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class ProfilePage extends AppCompatActivity {
     private LinearLayout homepage, navMerchant, navforum, navarticle;
@@ -19,6 +23,41 @@ public class ProfilePage extends AppCompatActivity {
         navMerchant = findViewById(R.id.navmerchant);
         navforum = findViewById(R.id.navforum);
         navarticle = findViewById(R.id.navarticle);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
+
+        String username = sharedPreferences.getString("username", "");
+        String email = sharedPreferences.getString("email", "");
+        String notelp = sharedPreferences.getString("notelp", "");
+
+        TextView usernameTextView = findViewById(R.id.username);
+        TextView emailTextView = findViewById(R.id.email);
+        TextView notelpTextView = findViewById(R.id.notelp);
+
+        usernameTextView.setText(username);
+        emailTextView.setText(email);
+        notelpTextView.setText(notelp);
+
+        if (!username.isEmpty()) {
+            usernameTextView.setText(username);
+        } else {
+            usernameTextView.setText("Default Username");
+        }
+
+// Check if email is not empty before setting it to TextView
+        if (!email.isEmpty()) {
+            emailTextView.setText(email);
+        } else {
+            emailTextView.setText("Default Email");
+        }
+
+// Check if notelp is not empty before setting it to TextView
+        if (!notelp.isEmpty()) {
+            notelpTextView.setText(notelp);
+        } else {
+            notelpTextView.setText("Default Notelp");
+        }
+
 
         homepage.setOnClickListener(new View.OnClickListener() {
             @Override
