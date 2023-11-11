@@ -8,11 +8,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class ProfilePage extends AppCompatActivity {
     private LinearLayout homepage, navMerchant, navforum, navarticle;
+    private Button logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +25,7 @@ public class ProfilePage extends AppCompatActivity {
         navMerchant = findViewById(R.id.navmerchant);
         navforum = findViewById(R.id.navforum);
         navarticle = findViewById(R.id.navarticle);
+        logout = findViewById(R.id.logout);
 
         SharedPreferences sharedPreferences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
 
@@ -58,6 +61,19 @@ public class ProfilePage extends AppCompatActivity {
             notelpTextView.setText("Default Notelp");
         }
 
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences sharedPreferences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                editor.clear();
+                editor.apply();
+
+                Intent homeIntent = new Intent(ProfilePage.this, MainActivity.class);
+                startActivity(homeIntent);
+            }
+        });
 
         homepage.setOnClickListener(new View.OnClickListener() {
             @Override
