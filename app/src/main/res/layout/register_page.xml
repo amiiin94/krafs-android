@@ -99,7 +99,7 @@
                     android:textColorHint="@color/abu"></EditText>
 
                 <EditText
-                    android:id="@+id/notlp"
+                    android:id="@+id/notelp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
@@ -136,13 +136,14 @@
                 </LinearLayout>
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/register"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginVertical="35dp"
-                    android:backgroundTint="#ffffff"
+                    android:backgroundTint="@color/main_brown"
                     android:text="Register"
-                    android:textColor="@color/main_brown"
+                    android:textColor="@color/white"
                     android:textStyle="bold"></com.google.android.material.button.MaterialButton>
 
             </LinearLayout>

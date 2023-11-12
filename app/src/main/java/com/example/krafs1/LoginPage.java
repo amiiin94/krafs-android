@@ -29,7 +29,7 @@ import java.util.Currency;
 import java.util.Locale;
 
 public class LoginPage extends AppCompatActivity {
-    private Button loginBtn;
+    private Button loginBtn, signupBtn;
     private EditText email;
     private EditText password;
 
@@ -40,6 +40,7 @@ public class LoginPage extends AppCompatActivity {
         loginBtn = findViewById(R.id.loginBtn);
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
+        signupBtn = findViewById(R.id.signupBtn);
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,7 +48,16 @@ public class LoginPage extends AppCompatActivity {
                 login();
             }
         });
+
+        signupBtn.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent signupIntent = new Intent(LoginPage.this, RegisterPage.class);
+                startActivity(signupIntent);
+            }
+        }));
     }
+
 
     public void login() {
         String hashedPassword = BCrypt.hashpw(password.getText().toString(), BCrypt.gensalt());
@@ -81,10 +91,12 @@ public class LoginPage extends AppCompatActivity {
                             editor.putString("password", password);
                             editor.apply();
 
+                            Toast.makeText(LoginPage.this, "Login successful!", Toast.LENGTH_SHORT).show();
+
                             Intent profileIntent = new Intent(LoginPage.this, ProfilePage.class);
                             startActivity(profileIntent);
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            Toast.makeText(LoginPage.this, "Login Unsuccessful!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 },
@@ -92,6 +104,7 @@ public class LoginPage extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(LoginPage.this, error.networkResponse.statusCode, Toast.LENGTH_SHORT).show();
+
                     }
                 }
         );

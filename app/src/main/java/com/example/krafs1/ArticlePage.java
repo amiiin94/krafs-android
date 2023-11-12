@@ -2,6 +2,7 @@ package com.example.krafs1;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -39,8 +40,15 @@ public class ArticlePage extends AppCompatActivity {
         navprofile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent profileIntent = new Intent(ArticlePage.this, LoginPage.class);
-                startActivity(profileIntent);
+                SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
+
+                if (sharedPreferences.getString("username", null) == null) {
+                    Intent loginIntent = new Intent(ArticlePage.this, LoginPage.class);
+                    startActivity(loginIntent);
+                } else {
+                    Intent profileIntent = new Intent(ArticlePage.this, ProfilePage.class);
+                    startActivity(profileIntent);
+                }
             }
         });
     }
