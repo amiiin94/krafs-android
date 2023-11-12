@@ -1,21 +1,14 @@
 package com.example.krafs1;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -23,7 +16,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,30 +29,30 @@ import java.util.Locale;
 
 public class MerchantPage extends AppCompatActivity {
     private LinearLayout homepage, navarticle, navprofile;
-    private TextView tv1Nama, tv1Harga, tv2Nama;
-    private ImageView iv1;
-    private TableLayout tableLayout;
-    private TableRow tableRow;
     private List<Product> productList;
+    private RecyclerView rv1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.merchant_page);
 
-        tableLayout = findViewById(R.id.tableLayout);
+        rv1 = findViewById(R.id.rv1);
+
+        rv1.setLayoutManager(new GridLayoutManager(this, 2));
+
+        int horizontalSpace = getResources().getDimensionPixelSize(R.dimen.space_between_cards_horizontal);
+        int verticalSpace = getResources().getDimensionPixelSize(R.dimen.space_between_cards_vertical);
+        rv1.addItemDecoration(new SpaceItemDecoration(this, horizontalSpace, verticalSpace));
+
 
         productList = new ArrayList<>();
 
-        tv1Nama = findViewById(R.id.tv1Nama);
-        tv1Harga = findViewById(R.id.tv1Harga);
-        iv1 = findViewById(R.id.iv1);
-        tv2Nama = findViewById(R.id.tv2Nama);
         homepage = findViewById(R.id.homepage);
         navarticle = findViewById(R.id.navarticle);
         navprofile = findViewById(R.id.navprofile);
 
-
+        getAllProducts();
 
         homepage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,23 +72,14 @@ public class MerchantPage extends AppCompatActivity {
         navprofile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
-
-                if (sharedPreferences.getString("username", null) == null) {
-                    Intent loginIntent = new Intent(MerchantPage.this, LoginPage.class);
-                    startActivity(loginIntent);
-                } else {
-                    Intent profileIntent = new Intent(MerchantPage.this, ProfilePage.class);
-                    startActivity(profileIntent);
-                }
+                Intent profileIntent = new Intent(MerchantPage.this, LoginPage.class);
+                startActivity(profileIntent);
             }
         });
-
-        getAllProduts();
         // Add any code specific to this activity here
     }
 
-    public void getAllProduts() {
+    public void getAllProducts() {
         String urlEndPoints = "https://ap-southeast-1.aws.data.mongodb-api.com/app/application-0-iyoxv/endpoint/getAllProducts";
 
         StringRequest sr = new StringRequest(
@@ -107,7 +90,6 @@ public class MerchantPage extends AppCompatActivity {
                     public void onResponse(String response) {
                         try {
                             JSONArray products = new JSONArray(response);
-
                             for (int i = 0; i < products.length(); i++) {
                                 JSONObject productJson = products.getJSONObject(i);
 
@@ -120,7 +102,11 @@ public class MerchantPage extends AppCompatActivity {
                                 String imgUrl = images.getString(0);
 
                                 // Menambahkan produk ke dalam productList
-                                productList.add(new Product(nama, formattedHarga, imgUrl));
+//
+                                Product product = new Product(nama, formattedHarga, imgUrl);
+
+//                                List<Product> productList = new ArrayList<>();
+                                productList.add(product);
                             }
                             displayProducts();
                         }catch (JSONException e) {
@@ -147,35 +133,8 @@ public class MerchantPage extends AppCompatActivity {
         requestQueue.add(sr);
     }
     private void displayProducts() {
-        for (Product product : productList) {
-            TableRow row = new TableRow(this);
-
-            CardView cardView = new CardView(this);
-            cardView.setLayoutParams(new TableRow.LayoutParams(
-                    TableRow.LayoutParams.MATCH_PARENT,
-                    TableRow.LayoutParams.WRAP_CONTENT
-            ));
-
-            LinearLayout linearLayout = new LinearLayout(this);
-            linearLayout.setOrientation(LinearLayout.VERTICAL);
-
-            ImageView imageView = new ImageView(this);
-            Picasso.get().load(product.getImageUrl()).into(imageView);
-
-            TextView nameTextView = new TextView(this);
-            nameTextView.setText(product.getName());
-
-            TextView priceTextView = new TextView(this);
-            priceTextView.setText(product.getPrice());
-
-            linearLayout.addView(imageView);
-            linearLayout.addView(nameTextView);
-            linearLayout.addView(priceTextView);
-
-            cardView.addView(linearLayout);
-            row.addView(cardView);
-            tableLayout.addView(row);
-        }
+        ProductAdapter productAdapter = new ProductAdapter(productList);
+        rv1.setAdapter(productAdapter);
     }
 
     public static class Product {

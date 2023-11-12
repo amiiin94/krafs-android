@@ -1,3 +1,5 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="space_between_cards_horizontal">8dp</dimen>
+    <dimen name="space_between_cards_vertical">8dp</dimen>
 </resources>
