@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
@@ -30,7 +31,9 @@ import java.util.Locale;
 public class MerchantPage extends AppCompatActivity {
     private LinearLayout homepage, navarticle, navprofile;
     private List<Product> productList;
+    private List<Category> categoryList;
     private RecyclerView rv1;
+    private RecyclerView rvButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,21 +41,25 @@ public class MerchantPage extends AppCompatActivity {
         setContentView(R.layout.merchant_page);
 
         rv1 = findViewById(R.id.rv1);
-
         rv1.setLayoutManager(new GridLayoutManager(this, 2));
-
         int horizontalSpace = getResources().getDimensionPixelSize(R.dimen.space_between_cards_horizontal);
         int verticalSpace = getResources().getDimensionPixelSize(R.dimen.space_between_cards_vertical);
         rv1.addItemDecoration(new SpaceItemDecoration(this, horizontalSpace, verticalSpace));
 
+        rvButton = findViewById(R.id.rvButton);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        rvButton.setLayoutManager(layoutManager);
+
 
         productList = new ArrayList<>();
+        categoryList = new ArrayList<>();
 
         homepage = findViewById(R.id.homepage);
         navarticle = findViewById(R.id.navarticle);
         navprofile = findViewById(R.id.navprofile);
 
         getAllProducts();
+        getAllCategory();
 
         homepage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,6 +165,61 @@ public class MerchantPage extends AppCompatActivity {
 
         public String getImageUrl() {
             return imageUrl;
+        }
+    }
+
+//    CATEGORY
+
+    public void getAllCategory () {
+        String urlEndPoints = "https://ap-southeast-1.aws.data.mongodb-api.com/app/application-0-iyoxv/endpoint/getAllCategories";
+
+        StringRequest sr = new StringRequest(
+                Request.Method.GET,
+                urlEndPoints,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONArray categories = new JSONArray(response);
+                            for (int i = 0; i < categories.length(); i++) {
+                                JSONObject categoryJson = categories.getJSONObject(i);
+
+                                String nama = categoryJson.getString("name");
+
+                                Category category = new Category(nama);
+                                categoryList.add(category);
+                            }
+                            displayCategory();
+                        }catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(MerchantPage.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        requestQueue.add(sr);
+    }
+
+    private void displayCategory() {
+        CategoryAdapter categoryAdapter = new CategoryAdapter(categoryList);
+        rvButton.setAdapter(categoryAdapter);
+    }
+
+    public static class Category {
+        private String name;
+
+        public Category(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
         }
     }
 }

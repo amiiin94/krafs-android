@@ -45,40 +45,18 @@
 
         <HorizontalScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginStart="28dp"
-                android:layout_marginTop="14dp"
-                android:paddingRight="30dp">
-
-                <Button
-                    android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvButton"
+                    android:layout_width="1000dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:layout_weight="1"
-                    android:text="COFFE BEANS"
-                    android:backgroundTint="@color/main_brown" />
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:layout_weight="1"
-                    android:text="COFFE POWDER"
-                    android:backgroundTint="@color/main_brown"/>
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:layout_weight="1"
-                    android:text="COFFE BEANS"
-                    android:backgroundTint="@color/main_brown"/>
+                    tools:listitem="@layout/item_category"
+                    android:orientation="horizontal"
+                    android:scrollbars="horizontal"
+                    android:layout_marginVertical="10dp"
+                    android:paddingHorizontal="28dp"/>
 
-
-            </LinearLayout>
         </HorizontalScrollView>
 
         <LinearLayout
