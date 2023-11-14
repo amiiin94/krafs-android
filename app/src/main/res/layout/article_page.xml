@@ -89,74 +89,10 @@
                 android:orientation="vertical"
                 android:layout_marginTop="10dp">
 
-                <androidx.cardview.widget.CardView
+                <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginEnd="24dp"
-                    app:cardElevation="4dp"
-                    app:cardCornerRadius="6dp"
-                    android:layout_marginBottom="16dp"
-                    app:cardUseCompatPadding="true"
-                    >
+                    android:layout_height="match_parent" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        >
-
-                        <LinearLayout
-                            android:layout_width="220dp"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:paddingTop="8dp"
-                            >
-
-                            <ImageView
-                                android:layout_width="180dp"
-                                android:layout_height="100dp"
-                                android:layout_gravity="center_horizontal"
-                                android:src="@drawable/article1" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_horizontal"
-                                android:layout_marginTop="5dp"
-                                android:text="IPB Kembangkan Sekolah Kopi untuk Lahirkan Ahli Kopi Andal Tanah Air"
-                                android:textSize="12sp"/>
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:paddingEnd="8dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="8dp"
-                            >
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="140dp"
-                                android:textSize="8dp"
-                                android:text="Rektor IPB Arif Satria bersama Gubernur Jawa Barat Ridwan Kamil, di sela-sela persiapan pelepasan ekspor kopi Arabika Garut ke Belanda, beberapa waktu lalu.
-Institut Pertanian Bogor (IPB) terus mengembangkan sekolah kopi secara bertahap di seluruh provinsi Indonesia. Terobosan itu diharapkan mampu menghasilan ahli kopi, termasuk barista kopi handal tanah air.
-
-"
-                                />
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:text="Read more"
-                                android:textSize="11sp"
-                                android:layout_gravity="end"
-                                android:gravity="bottom"
-                                />
-                        </LinearLayout>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
             </LinearLayout>
 
         </LinearLayout>

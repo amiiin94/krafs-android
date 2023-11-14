@@ -15,24 +15,25 @@
             android:id="@+id/sender"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sender" />
+            android:text="Sender"
+            android:layout_marginBottom="5dp"
+            android:layout_marginStart="5dp" />
 
         <androidx.cardview.widget.CardView
-            android:layout_width="277dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/hijau_muda"
             app:cardCornerRadius="12dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="331dp"
-                android:layout_height="wrap_content"
-                >
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/chat"
                     android:layout_width="209dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="12dp"
                     android:layout_marginTop="16dp"
                     android:text="Loren ipsum"
                     app:layout_constraintStart_toStartOf="parent"
@@ -43,12 +44,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
+                    android:layout_marginEnd="12dp"
                     android:layout_marginBottom="10dp"
                     android:text="09.45"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/chat"
-                    app:layout_constraintVertical_bias="0.0"
-                    tools:layout_editor_absoluteX="225dp" />
+                    app:layout_constraintVertical_bias="0.0" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>
