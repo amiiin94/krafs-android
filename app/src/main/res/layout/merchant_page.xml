@@ -97,7 +97,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:background="@color/white">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -133,7 +134,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="8dp"
-                        android:src="@drawable/merch_icon" />
+                        android:src="@drawable/merch_icon_select" />
 
                     <TextView
                         android:layout_width="match_parent"
