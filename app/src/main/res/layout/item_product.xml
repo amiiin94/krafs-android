@@ -18,6 +18,11 @@
             android:scaleType="centerCrop" />
 
         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvId"
+            android:visibility="gone"></TextView>
+        <TextView
             android:id="@+id/tvProductName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,6 +42,7 @@
                 />
 
             <ImageView
+                android:id="@+id/ivDetail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"

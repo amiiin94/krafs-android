@@ -100,6 +100,7 @@ public class MerchantPage extends AppCompatActivity {
                             for (int i = 0; i < products.length(); i++) {
                                 JSONObject productJson = products.getJSONObject(i);
 
+                                String idp = productJson.getString("_id");
                                 String nama = productJson.getString("name");
                                 int price = productJson.getInt("price");
                                 String formattedHarga = formatToRupiah(price);
@@ -110,7 +111,7 @@ public class MerchantPage extends AppCompatActivity {
 
                                 // Menambahkan produk ke dalam productList
 //
-                                Product product = new Product(nama, formattedHarga, imgUrl);
+                                Product product = new Product(idp, nama, formattedHarga, imgUrl);
 
 //                                List<Product> productList = new ArrayList<>();
                                 productList.add(product);
@@ -145,15 +146,19 @@ public class MerchantPage extends AppCompatActivity {
     }
 
     public static class Product {
+        private  String idp;
         private String name;
         private String price;
         private String imageUrl;
 
-        public Product(String name, String price, String imageUrl) {
+        public Product(String idp ,String name, String price, String imageUrl) {
+            this.idp = idp;
             this.name = name;
             this.price = price;
             this.imageUrl = imageUrl;
         }
+
+        public  String getIdp() {return idp;}
 
         public String getName() {
             return name;

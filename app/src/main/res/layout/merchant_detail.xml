@@ -4,29 +4,14 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/bgfix2">
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/chat"
-        app:layout_constraintBottom_toBottomOf="@id/iv123"
-        app:layout_constraintTop_toTopOf="parent"
-        android:id="@+id/tv123"/>
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:src="@drawable/retangle"
-        android:id="@+id/iv123"
-        app:layout_constraintBottom_toBottomOf="@id/ll123"
-        app:layout_constraintTop_toTopOf="@id/tv123"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@color/white"
-        android:id="@+id/ll123"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="@id/iv123">
 
-    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvcontoh"
+        android:background="@color/main_brown"
+        android:textColor="@color/white"
+        android:text="cscs"></TextView>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="71dp"
@@ -48,21 +33,21 @@
                 android:orientation="horizontal"
                 android:background="@color/white"
                 android:gravity="center_vertical">
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:text="Buy Now"
                     android:layout_marginHorizontal="5dp"
-                    android:backgroundTint="@color/white"
-                    android:textColor="@color/main_brown"></Button>
+                    android:background="@drawable/btn_bg"
+                    android:textColor="@color/white"></com.google.android.material.button.MaterialButton>
                 <Button
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:text="+ Chart"
                     android:layout_marginHorizontal="5dp"
-                    android:backgroundTint="@color/main_brown"></Button>
+                    android:background="@drawable/btn_bg"></Button>
             </LinearLayout>
         </com.google.android.material.bottomnavigation.BottomNavigationView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

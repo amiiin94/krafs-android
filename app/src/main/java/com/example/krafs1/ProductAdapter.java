@@ -1,6 +1,7 @@
 package com.example.krafs1;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
@@ -43,13 +45,29 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        // Get the data model based on position
+        // Mendapatkan data dari dataset pada posisi tertentu
         MerchantPage.Product product = productList.get(position);
 
-        // Set item views based on your views and data model
+        // Menetapkan data ke tampilan holder
+        holder.tvId.setText(product.getIdp());
         holder.tvProductName.setText(product.getName());
         holder.tvProductPrice.setText(product.getPrice());
         Picasso.get().load(product.getImageUrl()).into(holder.ivProductImage);
+
+        // Menetapkan OnClickListener untuk item card
+        holder.ivDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Menyiapkan Intent untuk berpindah ke aktivitas detail
+                Intent intent = new Intent(view.getContext(), MerchantDetail.class);
+
+                // Menambahkan ID ke Intent
+                intent.putExtra("PRODUCT_ID", product.getIdp());
+
+                // Memulai aktivitas detail
+                view.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -59,16 +77,20 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivProductImage;
+        TextView tvId;
         TextView tvProductName;
         TextView tvProductPrice;
+        ImageView ivDetail;
 
         ViewHolder(View itemView) {
             super(itemView);
 
             // Get references to the views defined in item_product.xml
             ivProductImage = itemView.findViewById(R.id.ivProductImage);
+            tvId = itemView.findViewById(R.id.tvId);
             tvProductName = itemView.findViewById(R.id.tvProductName);
             tvProductPrice = itemView.findViewById(R.id.tvProductPrice);
+            ivDetail = itemView.findViewById(R.id.ivDetail);
         }
     }
 }

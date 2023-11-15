@@ -50,6 +50,9 @@
 
             <!-- Include any intent filters or other activity properties as needed -->
         </activity>
+
+        <activity android:name=".MerchantDetail" />
+
     </application>
 
 </manifest>
