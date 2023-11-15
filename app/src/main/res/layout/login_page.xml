@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/kombinebg"
+    android:background="@drawable/bgfix2"
     tools:context=".MainActivity">
 
     <androidx.cardview.widget.CardView
