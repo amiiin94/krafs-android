@@ -32,7 +32,12 @@ public class MainActivity extends AppCompatActivity {
         String username = sharedPreferences.getString("username", "");
 
         TextView textSelamatDatang = findViewById(R.id.selamatDatang);
-        textSelamatDatang.setText("Hai " + username);
+        if (!username.isEmpty()) {
+            textSelamatDatang.setText("Hai " + username);
+        } else {
+            textSelamatDatang.setText("Welcome to KRAFS");
+        }
+
 
 
 
