@@ -29,7 +29,7 @@ public class MerchantDetail extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.merchant_detail);
+        setContentView(R.layout.product_detail);
 
         // Menerima ID dari Intent
         Intent intent = getIntent();

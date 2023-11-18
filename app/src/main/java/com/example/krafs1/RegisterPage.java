@@ -52,13 +52,13 @@ public class RegisterPage extends AppCompatActivity {
     }
 
     public void registerUser(String username, String email, String notelp, String password) {
-        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+        //String hashedPassword = BCrypt.hashpw(password.toString(), BCrypt.gensalt());
 
         String urlEndPoints = "https://ap-southeast-1.aws.data.mongodb-api.com/app/application-0-iyoxv/endpoint/insertUser" +
                 "?username=" + username +
                 "&email=" + email +
                 "&notelp=" + notelp +
-                "&password=" + hashedPassword;
+                "&password=" + password;
 
         StringRequest sr = new StringRequest(
                 Request.Method.POST,
@@ -66,14 +66,25 @@ public class RegisterPage extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
 
-                        Toast.makeText(RegisterPage.this, "Registration successful!", Toast.LENGTH_SHORT).show();
-
-                        Intent loginIntent = new Intent(RegisterPage.this, LoginPage.class);
-                        startActivity(loginIntent);
-
-                        // Process the response as needed
-                        // You might want to store the user data or perform other actions here
+                            // Check if the response contains an error field
+                            if (jsonResponse.has("error")) {
+                                String errorMessage = jsonResponse.getString("error");
+                                // Display toast with the error message
+                                Toast.makeText(RegisterPage.this, errorMessage, Toast.LENGTH_SHORT).show();
+                            } else {
+                                // Registration successful
+                                Toast.makeText(RegisterPage.this, "Registration successful!", Toast.LENGTH_SHORT).show();
+                                Intent loginIntent = new Intent(RegisterPage.this, LoginPage.class);
+                                startActivity(loginIntent);
+                            }
+                        } catch (JSONException e) {
+                            // Handle JSON parsing error
+                            e.printStackTrace();
+                            Toast.makeText(RegisterPage.this, "Registration failed", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 },
                 new Response.ErrorListener() {

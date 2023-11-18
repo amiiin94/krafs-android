@@ -1,11 +1,17 @@
 package com.example.krafs1;
 
+import android.content.Context;
+import android.os.Bundle;
+import android.content.SharedPreferences;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.os.Bundle;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,20 +25,23 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ForumDetail extends AppCompatActivity {
 
-    private List<ForumDetail.Chat> chatList;
-
+    private List<Chat> chatList;
     private RecyclerView rvChat;
-
-
+    private EditText message_input;
+    private Button send;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.forum_detail_page);
+
+        message_input = findViewById(R.id.message_input);
+        send = findViewById(R.id.send);
 
         rvChat = findViewById(R.id.rvChat);
         rvChat.setLayoutManager(new GridLayoutManager(this, 1));
@@ -40,18 +49,38 @@ public class ForumDetail extends AppCompatActivity {
         int verticalSpace = getResources().getDimensionPixelSize(R.dimen.space_between_cards_vertical);
         rvChat.addItemDecoration(new SpaceItemDecoration(this, horizontalSpace, verticalSpace));
 
+        //Get sender from shared preference
+        SharedPreferences sharedPreferences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
+
+        String sender = sharedPreferences.getString("username", "");
+
         chatList = new ArrayList<>();
 
+        message_input = findViewById(R.id.message_input);
+
+
         // Set an empty adapter
-        ChatAdapter chatAdapter = new ChatAdapter(chatList);
+        ChatAdapter chatAdapter = new ChatAdapter(chatList, this);
         rvChat.setAdapter(chatAdapter);
 
-        getAllchats();
-        // Add any code specific to this activity here
+        getAllChats();
+
+        //when click send
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String enteredMessageInput = message_input.getText().toString();
+
+                sendMessage(sender, enteredMessageInput);
+
+                //make input in message_input disappear
+                message_input.setText("");
+            }
+        });
     }
 
-
-    public void getAllchats() {
+    public void getAllChats() {
         String urlEndPoints = "https://ap-southeast-1.aws.data.mongodb-api.com/app/application-0-iyoxv/endpoint/getAllChats";
 
         StringRequest sr = new StringRequest(
@@ -61,6 +90,9 @@ public class ForumDetail extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         try {
+                            // Clear existing messages before adding new ones
+                            chatList.clear();
+
                             JSONArray chats = new JSONArray(response);
                             for (int i = 0; i < chats.length(); i++) {
                                 JSONObject chatJson = chats.getJSONObject(i);
@@ -69,11 +101,11 @@ public class ForumDetail extends AppCompatActivity {
                                 String chat = chatJson.getString("chat");
                                 String time = chatJson.getString("time");
 
-                                // Menambahkan chat ke dalam chatList
-                                ForumDetail.Chat chatObject = new ForumDetail.Chat(sender, chat, time);
+                                // Add chat to chatList
+                                Chat chatObject = new Chat(sender, chat, time);
                                 chatList.add(chatObject);
                             }
-                            displaychats();
+                            displayChats();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -90,16 +122,39 @@ public class ForumDetail extends AppCompatActivity {
         requestQueue.add(sr);
     }
 
-    private void displaychats() {
+
+    private void displayChats() {
         ChatAdapter chatAdapter = (ChatAdapter) rvChat.getAdapter();
-        chatAdapter.updateChatList(chatList);
+        if (chatAdapter != null) {
+            chatAdapter.updateChatList(chatList);
+        }
     }
 
+    public void sendMessage(String sender, String message) {
+        // Modify the URL and parameters as needed
+        String urlEndPoints = "https://ap-southeast-1.aws.data.mongodb-api.com/app/application-0-iyoxv/endpoint/sendMessageinForum" +
+                "?sender=" + sender +
+                "&chat=" + message;
 
-
-
-
-
+        StringRequest sr = new StringRequest(
+                Request.Method.POST,
+                urlEndPoints,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        getAllChats();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(ForumDetail.this, "Message sending failed", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        requestQueue.add(sr);
+    }
 
     public static class Chat {
         private String sender;

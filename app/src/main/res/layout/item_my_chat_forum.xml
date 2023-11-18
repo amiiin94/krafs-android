@@ -2,9 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:id="@+id/mainLayout"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/mainLayout">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,17 +14,21 @@
 
         <TextView
             android:id="@+id/sender"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sender"
+            android:layout_gravity="end"
+            android:layout_marginStart="5dp"
             android:layout_marginBottom="5dp"
-            android:layout_marginStart="5dp" />
+            android:layout_marginEnd="5dp"
+            android:text="Sender" /><!-- Set layout_gravity to end -->
+
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/hijau_muda"
-            app:cardCornerRadius="12dp">
+            android:backgroundTint="@color/biru_muda"
+            app:cardCornerRadius="12dp"
+            android:layout_gravity="end"> <!-- Set layout_gravity to end -->
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -31,7 +36,7 @@
 
                 <TextView
                     android:id="@+id/chat"
-                    android:layout_width="209dp"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="16dp"

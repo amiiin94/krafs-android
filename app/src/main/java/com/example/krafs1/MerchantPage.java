@@ -1,6 +1,7 @@
 package com.example.krafs1;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -29,7 +30,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class MerchantPage extends AppCompatActivity {
-    private LinearLayout homepage, navarticle, navprofile;
+    private LinearLayout homepage, navforum, navarticle, navprofile;
     private List<Product> productList;
     private List<Category> categoryList;
     private RecyclerView rv1;
@@ -55,6 +56,7 @@ public class MerchantPage extends AppCompatActivity {
         categoryList = new ArrayList<>();
 
         homepage = findViewById(R.id.homepage);
+        navforum = findViewById(R.id.navforum);
         navarticle = findViewById(R.id.navarticle);
         navprofile = findViewById(R.id.navprofile);
 
@@ -68,6 +70,15 @@ public class MerchantPage extends AppCompatActivity {
                 startActivity(homeIntent);
             }
         });
+
+        navforum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent homeIntent = new Intent(MerchantPage.this, ForumPage.class);
+                startActivity(homeIntent);
+            }
+        });
+
         navarticle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,14 +86,21 @@ public class MerchantPage extends AppCompatActivity {
                 startActivity(articleIntent);
             }
         });
-
         navprofile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent profileIntent = new Intent(MerchantPage.this, LoginPage.class);
-                startActivity(profileIntent);
+                SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
+
+                if (sharedPreferences.getString("username", null) == null) {
+                    Intent loginIntent = new Intent(MerchantPage.this, LoginPage.class);
+                    startActivity(loginIntent);
+                } else {
+                    Intent profileIntent = new Intent(MerchantPage.this, ProfilePage.class);
+                    startActivity(profileIntent);
+                }
             }
         });
+
         // Add any code specific to this activity here
     }
 

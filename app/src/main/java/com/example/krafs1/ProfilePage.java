@@ -93,6 +93,14 @@ public class ProfilePage extends AppCompatActivity {
 
         navforum.setOnClickListener(new View.OnClickListener() {
             @Override
+            public void onClick(View view) {
+                Intent forumIntent = new Intent(ProfilePage.this, ForumPage.class);
+                startActivity(forumIntent);
+            }
+        });
+
+        navforum.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 // Handle ketika elemen navMerchant diklik
                 Intent forumtIntent = new Intent(ProfilePage.this, ForumPage.class);

@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class ArticlePage extends AppCompatActivity {
-    private LinearLayout homepage, navmerchant, navarticle, navprofile;
+    private LinearLayout homepage, navmerchant, navforum, navprofile;
 
 
     protected void onCreate(Bundle savedInstanceState){
@@ -19,6 +19,7 @@ public class ArticlePage extends AppCompatActivity {
 
         homepage = findViewById(R.id.homepage);
         navmerchant = findViewById(R.id.navmerchant);
+        navforum = findViewById(R.id.navforum);
         navprofile = findViewById(R.id.navprofile);
 
         homepage.setOnClickListener(new View.OnClickListener() {
@@ -34,6 +35,14 @@ public class ArticlePage extends AppCompatActivity {
             public void onClick(View view) {
                 Intent merchantIntent = new Intent(ArticlePage.this, MerchantPage.class);
                 startActivity(merchantIntent);
+            }
+        });
+
+        navforum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent forumIntent = new Intent(ArticlePage.this, ForumPage.class);
+                startActivity(forumIntent);
             }
         });
 

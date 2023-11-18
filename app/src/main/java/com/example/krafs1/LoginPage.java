@@ -60,7 +60,8 @@ public class LoginPage extends AppCompatActivity {
 
 
     public void login() {
-        String hashedPassword = BCrypt.hashpw(password.getText().toString(), BCrypt.gensalt());
+        //String password1 = password.getText().toString();
+        //String hashedPassword = BCrypt.hashpw(password1, BCrypt.gensalt());
 
         String urlEndPoints = "https://ap-southeast-1.aws.data.mongodb-api.com/app/application-0-iyoxv/endpoint/getUserbyemailandPassword?email=" + email.getText().toString() + "&password=" + password.getText().toString();
 
@@ -80,7 +81,6 @@ public class LoginPage extends AppCompatActivity {
                             String username = userJson.getString("username");
                             String email = userJson.getString("email");
                             String notelp = userJson.getString("notelp");
-                            String password = userJson.getString("password");
 
                             // Store user data in SharedPreferences
                             SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
@@ -88,7 +88,6 @@ public class LoginPage extends AppCompatActivity {
                             editor.putString("username", username);
                             editor.putString("email", email);
                             editor.putString("notelp", notelp);
-                            editor.putString("password", password);
                             editor.apply();
 
                             Toast.makeText(LoginPage.this, "Login successful!", Toast.LENGTH_SHORT).show();
