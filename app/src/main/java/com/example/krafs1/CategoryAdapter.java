@@ -14,9 +14,11 @@ import java.util.List;
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
     private List<MerchantPage.Category> categoryList;
     private Context context;
+    private MerchantPage merchantPage;
 
-    public CategoryAdapter(List<MerchantPage.Category> categoryList) {
+    public CategoryAdapter(List<MerchantPage.Category> categoryList, MerchantPage merchantPage) {
         this.categoryList = categoryList;
+        this.merchantPage = merchantPage;
     }
 
     @NonNull
@@ -46,6 +48,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
         // Set item views based on your views and data model
         holder.tvCategoryName.setText(category.getName());
+
+        holder.tvCategoryName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String categoryId = category.getIdc();
+                merchantPage.getProductByCategory(categoryId);
+            }
+        });
     }
     public int getItemCount() {
         return categoryList.size();

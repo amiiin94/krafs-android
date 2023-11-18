@@ -48,26 +48,33 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         // Mendapatkan data dari dataset pada posisi tertentu
         MerchantPage.Product product = productList.get(position);
 
-        // Menetapkan data ke tampilan holder
-        holder.tvId.setText(product.getIdp());
-        holder.tvProductName.setText(product.getName());
-        holder.tvProductPrice.setText(product.getPrice());
-        Picasso.get().load(product.getImageUrl()).into(holder.ivProductImage);
+        if (productList.isEmpty()) {
+            // Menetapkan data ke tampilan holder
+            holder.tvEmpty.setVisibility(View.VISIBLE);
+            holder.tvId.setVisibility(View.GONE);
+            holder.tvProductName.setVisibility(View.GONE);
+            holder.tvProductPrice.setVisibility(View.GONE);
+        }else {
+            holder.tvEmpty.setVisibility(View.GONE);
+            holder.tvId.setText(product.getIdp());
+            holder.tvProductName.setText(product.getName());
+            holder.tvProductPrice.setText(product.getPrice());
+            Picasso.get().load(product.getImageUrl()).into(holder.ivProductImage);
 
-        // Menetapkan OnClickListener untuk item card
-        holder.ivDetail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Menyiapkan Intent untuk berpindah ke aktivitas detail
-                Intent intent = new Intent(view.getContext(), MerchantDetail.class);
+            holder.ivDetail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Menyiapkan Intent untuk berpindah ke aktivitas detail
+                    Intent intent = new Intent(view.getContext(), MerchantDetail.class);
 
-                // Menambahkan ID ke Intent
-                intent.putExtra("PRODUCT_ID", product.getIdp());
+                    // Menambahkan ID ke Intent
+                    intent.putExtra("PRODUCT_ID", product.getIdp());
 
-                // Memulai aktivitas detail
-                view.getContext().startActivity(intent);
-            }
-        });
+                    // Memulai aktivitas detail
+                    view.getContext().startActivity(intent);
+                }
+            });
+        }
     }
 
     @Override
@@ -81,11 +88,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         TextView tvProductName;
         TextView tvProductPrice;
         ImageView ivDetail;
+        TextView tvEmpty;
 
         ViewHolder(View itemView) {
             super(itemView);
 
             // Get references to the views defined in item_product.xml
+            tvEmpty = itemView.findViewById(R.id.tvEmpty);
             ivProductImage = itemView.findViewById(R.id.ivProductImage);
             tvId = itemView.findViewById(R.id.tvId);
             tvProductName = itemView.findViewById(R.id.tvProductName);

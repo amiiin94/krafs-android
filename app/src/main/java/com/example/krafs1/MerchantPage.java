@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class MerchantPage extends AppCompatActivity {
+    private Button AllMerch;
     private LinearLayout homepage, navforum, navarticle, navprofile;
     private List<Product> productList;
     private List<Category> categoryList;
@@ -59,6 +61,8 @@ public class MerchantPage extends AppCompatActivity {
         navforum = findViewById(R.id.navforum);
         navarticle = findViewById(R.id.navarticle);
         navprofile = findViewById(R.id.navprofile);
+
+        AllMerch = findViewById(R.id.AllMerch);
 
         getAllProducts();
         getAllCategory();
@@ -98,6 +102,13 @@ public class MerchantPage extends AppCompatActivity {
                     Intent profileIntent = new Intent(MerchantPage.this, ProfilePage.class);
                     startActivity(profileIntent);
                 }
+            }
+        });
+        AllMerch.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                productList.clear();
+                getAllProducts();
             }
         });
 
@@ -207,9 +218,10 @@ public class MerchantPage extends AppCompatActivity {
                             for (int i = 0; i < categories.length(); i++) {
                                 JSONObject categoryJson = categories.getJSONObject(i);
 
+                                String idc = categoryJson.getString("_id");
                                 String nama = categoryJson.getString("name");
 
-                                Category category = new Category(nama);
+                                Category category = new Category(idc, nama);
                                 categoryList.add(category);
                             }
                             displayCategory();
@@ -230,19 +242,84 @@ public class MerchantPage extends AppCompatActivity {
     }
 
     private void displayCategory() {
-        CategoryAdapter categoryAdapter = new CategoryAdapter(categoryList);
+        CategoryAdapter categoryAdapter = new CategoryAdapter(categoryList, this);
         rvButton.setAdapter(categoryAdapter);
     }
 
     public static class Category {
+        private String idc;
         private String name;
 
-        public Category(String name) {
+        public Category(String idc ,String name) {
+            this.idc = idc;
             this.name = name;
         }
 
         public String getName() {
             return name;
         }
+
+        public String getIdc() {
+            return idc;
+        }
     }
+//    Sort Category
+
+    public void getProductByCategory(String categoryId) {
+        String url = "https://ap-southeast-1.aws.data.mongodb-api.com/app/application-0-iyoxv/endpoint/getProductByCategory?category=" + categoryId;
+
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.GET,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONArray products = new JSONArray(response);
+
+                            productList.clear();
+
+                            for (int i = 0; i < products.length(); i++) {
+                                JSONObject productJson = products.getJSONObject(i);
+
+                                String idp = productJson.getString("_id");
+                                String nama = productJson.getString("name");
+                                int price = productJson.getInt("price");
+                                String formattedHarga = formatToRupiah(price);
+
+                                // Mengambil URL gambar
+                                JSONArray images = productJson.getJSONArray("images");
+                                String imgUrl = images.getString(0);
+
+                                Product product  = new Product (idp, nama, formattedHarga, imgUrl);
+                                productList.add(product);
+                            }
+                            displayProducts();
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    private String formatToRupiah(int value) {
+                        NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
+                        formatRupiah.setCurrency(Currency.getInstance("IDR"));
+
+                        String formattedValue = formatRupiah.format(value).replace("Rp", "").trim();
+
+                        return "Rp. " + formattedValue;
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(MerchantPage.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        requestQueue.add(stringRequest);
+    }
+//    public void onCategoryItemClick(String categoryId) {
+//        getProductByCategory(categoryId);
+//    }
 }
