@@ -1,15 +1,18 @@
 package com.example.krafs1;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     private LinearLayout navMerchant, navarticle, navforum, navprofile;
+    private TextView selamatDatang;
 
 
     @Override
@@ -21,6 +24,17 @@ public class MainActivity extends AppCompatActivity {
         navarticle = findViewById(R.id.navarticle);
         navprofile = findViewById(R.id.navprofile);
         navforum = findViewById(R.id.navforum);
+
+
+
+        SharedPreferences sharedPreferences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
+
+        String username = sharedPreferences.getString("username", "");
+
+        TextView textSelamatDatang = findViewById(R.id.selamatDatang);
+        textSelamatDatang.setText("Hai " + username);
+
+
 
 
         // Menambahkan OnClickListener ke elemen navMerchant
