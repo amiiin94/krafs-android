@@ -3,6 +3,7 @@ package com.example.krafs1;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,8 +25,10 @@ import java.text.NumberFormat;
 import java.util.Currency;
 import java.util.Locale;
 
-public class MerchantDetail extends AppCompatActivity {
-    TextView tvcontoh;
+public class ProductDetail extends AppCompatActivity {
+    TextView nama_produk, harga_produk, stok_produk, deskripsi_produk;
+    ImageView foto_produk;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +42,11 @@ public class MerchantDetail extends AppCompatActivity {
 
             // Sekarang, Anda dapat menggunakan cardId untuk menampilkan detail kartu yang sesuai
             // ...
-
-            tvcontoh = findViewById(R.id.tvcontoh);
+            foto_produk = findViewById(R.id.foto_produk);
+            nama_produk = findViewById(R.id.nama_produk);
+            harga_produk = findViewById(R.id.harga_produk);
+            stok_produk = findViewById(R.id.stok_produk);
+            deskripsi_produk = findViewById(R.id.deskripsi_produk);
 //            tvcontoh.setText("Product ID: " + productId);
             getProductById(productId);
         } else {
@@ -62,17 +69,24 @@ public class MerchantDetail extends AppCompatActivity {
                             JSONObject productJson = products.getJSONObject(0);
 
                             String idp = productJson.getString("_id");
-                            String nama = productJson.getString("name");
+                            String name = productJson.getString("name");
                             int price = productJson.getInt("price");
+                            String stock = productJson.getString("stock");
+                            String description = productJson.getString("description");
                             String formattedHarga = formatToRupiah(price);
 
                             // Mengambil URL gambar
                             JSONArray images = productJson.getJSONArray("images");
                             String imgUrl = images.getString(0);
 
-                            String isinya = ("tes : "+nama+" "+idp+" "+formattedHarga+" "+imgUrl);
-                            tvcontoh.setText(isinya);
-                            Log.d("MerchantDetail", "Response: " + isinya);
+                            //taro data di id textview
+                            Picasso.get().load(imgUrl).into(foto_produk);
+                            nama_produk.setText(name);  // Use 'name' instead of 'formattedHarga'
+                            harga_produk.setText(formattedHarga);
+                            stok_produk.setText("Stock: " + stock + " Pcs");
+                            deskripsi_produk.setText(description);
+
+
 
                         }
                         catch (JSONException e) {
@@ -91,7 +105,7 @@ public class MerchantDetail extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(MerchantDetail.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProductDetail.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
                     }
                 }
         );

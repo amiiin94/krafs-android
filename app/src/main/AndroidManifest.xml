@@ -51,7 +51,7 @@
             <!-- Include any intent filters or other activity properties as needed -->
         </activity>
 
-        <activity android:name=".MerchantDetail" />
+        <activity android:name=".ProductDetail" />
 
     </application>
 

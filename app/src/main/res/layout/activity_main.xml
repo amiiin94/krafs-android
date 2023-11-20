@@ -141,6 +141,7 @@
                         app:srcCompat="@drawable/forum" />
 
                     <Button
+                        android:id="@+id/join_our_community"
                         android:layout_width="145dp"
                         android:layout_height="37dp"
                         android:backgroundTint="@color/main_brown"

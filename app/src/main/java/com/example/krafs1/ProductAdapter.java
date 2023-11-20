@@ -65,7 +65,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 @Override
                 public void onClick(View view) {
                     // Menyiapkan Intent untuk berpindah ke aktivitas detail
-                    Intent intent = new Intent(view.getContext(), MerchantDetail.class);
+                    Intent intent = new Intent(view.getContext(), ProductDetail.class);
 
                     // Menambahkan ID ke Intent
                     intent.putExtra("PRODUCT_ID", product.getIdp());

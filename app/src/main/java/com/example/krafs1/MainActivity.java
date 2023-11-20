@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     private LinearLayout navMerchant, navarticle, navforum, navprofile;
+    private Button join_our_community;
     private TextView selamatDatang;
 
 
@@ -25,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         navprofile = findViewById(R.id.navprofile);
         navforum = findViewById(R.id.navforum);
 
-
+        join_our_community = findViewById(R.id.join_our_community);
 
         SharedPreferences sharedPreferences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
 
@@ -38,7 +40,20 @@ public class MainActivity extends AppCompatActivity {
             textSelamatDatang.setText("Welcome to KRAFS");
         }
 
+        join_our_community.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
 
+                if (sharedPreferences.getString("username", null) == null) {
+                    Intent loginIntent = new Intent(MainActivity.this, LoginPage.class);
+                    startActivity(loginIntent);
+                } else {
+                    Intent profileIntent = new Intent(MainActivity.this, ForumDetail.class);
+                    startActivity(profileIntent);
+                }
+            }
+        });
 
 
 
