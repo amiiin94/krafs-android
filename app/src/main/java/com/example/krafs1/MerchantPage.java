@@ -3,9 +3,14 @@ package com.example.krafs1;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,6 +42,7 @@ public class MerchantPage extends AppCompatActivity {
     private List<Category> categoryList;
     private RecyclerView rv1;
     private RecyclerView rvButton;
+    private EditText editTextText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +54,8 @@ public class MerchantPage extends AppCompatActivity {
         int horizontalSpace = getResources().getDimensionPixelSize(R.dimen.space_between_cards_horizontal);
         int verticalSpace = getResources().getDimensionPixelSize(R.dimen.space_between_cards_vertical);
         rv1.addItemDecoration(new SpaceItemDecoration(this, horizontalSpace, verticalSpace));
+
+        editTextText = findViewById(R.id.editTextText);
 
         rvButton = findViewById(R.id.rvButton);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -112,6 +120,19 @@ public class MerchantPage extends AppCompatActivity {
             }
         });
 
+        editTextText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    // Panggil fungsi atau kode yang ingin Anda jalankan
+                    String isi2 = "vkbvkbewbfebfwl";
+                    Log.d("",isi2);
+                    return true;
+
+                }
+                return false;
+            }
+        });
         // Add any code specific to this activity here
     }
 

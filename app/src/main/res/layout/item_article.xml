@@ -50,7 +50,6 @@
                     android:id="@+id/title"
                     android:layout_marginTop="5dp"
                     android:gravity="center_horizontal"
-                    android:text="IPB Kembangkan Sekolah Kopi untuk Lahirkan Ahli Kopi Andal Tanah Air"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -66,10 +65,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="140dp"
                     android:id="@+id/content"
-                    android:text="Rektor IPB Arif Satria bersama Gubernur Jawa Barat Ridwan Kamil, di sela-sela persiapan pelepasan ekspor kopi Arabika Garut ke Belanda, beberapa waktu lalu.
-Institut Pertanian Bogor (IPB) terus mengembangkan sekolah kopi secara bertahap di seluruh provinsi Indonesia. Terobosan itu diharapkan mampu menghasilan ahli kopi, termasuk barista kopi handal tanah air.
-
-"
                     android:textSize="8dp" />
 
                 <TextView

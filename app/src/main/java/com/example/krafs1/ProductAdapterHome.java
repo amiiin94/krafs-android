@@ -15,11 +15,11 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
+public class ProductAdapterHome extends RecyclerView.Adapter<ProductAdapterHome.ViewHolder> {
     private List<MerchantPage.Product> productList;
     private Context context;
 
-    public ProductAdapter(List<MerchantPage.Product> productList) {
+    public ProductAdapterHome(List<MerchantPage.Product> productList) {
         this.productList = productList;
     }
 
@@ -31,12 +31,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         LayoutInflater inflater = LayoutInflater.from(context);
 
         // Inflate the custom layout
-        View productView = inflater.inflate(R.layout.item_product, parent, false);
+        View productView = inflater.inflate(R.layout.item_product_home, parent, false);
 
         RecyclerView.LayoutParams layoutParams = new RecyclerView.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
         );
+        layoutParams.setMarginEnd(25);
         productView.setLayoutParams(layoutParams);
 
         // Return a new holder instance
