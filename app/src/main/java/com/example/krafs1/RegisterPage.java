@@ -21,6 +21,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.mindrot.jbcrypt.BCrypt;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class RegisterPage extends AppCompatActivity {
 
     private MaterialButton register;
@@ -53,12 +56,14 @@ public class RegisterPage extends AppCompatActivity {
 
     public void registerUser(String username, String email, String notelp, String password) {
         //String hashedPassword = BCrypt.hashpw(password.toString(), BCrypt.gensalt());
+        //MD5 Hashed
+        String encryptedInputPassword = MD5Encryption.encrypt(password.toString());
 
         String urlEndPoints = "https://ap-southeast-1.aws.data.mongodb-api.com/app/application-0-iyoxv/endpoint/insertUser" +
                 "?username=" + username +
                 "&email=" + email +
                 "&notelp=" + notelp +
-                "&password=" + password;
+                "&password=" + encryptedInputPassword;
 
         StringRequest sr = new StringRequest(
                 Request.Method.POST,
@@ -98,5 +103,34 @@ public class RegisterPage extends AppCompatActivity {
         requestQueue.add(sr);
     }
 
+    public static class MD5Encryption {
+        public static String encrypt(String password) {
+            try {
+                // Create MD5 Hash
+                MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
+                digest.update(password.getBytes());
+                byte messageDigest[] = digest.digest();
 
+                // Create Hex String
+                StringBuilder hexString = new StringBuilder();
+                for (byte aMessageDigest : messageDigest) {
+                    String h = Integer.toHexString(0xFF & aMessageDigest);
+                    while (h.length() < 2)
+                        h = "0" + h;
+                    hexString.append(h);
+                }
+                return hexString.toString();
+
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+            return "";
+        }
+
+        public static void main(String[] args) {
+            String password = "myPassword";
+            System.out.println("Original password: " + password);
+            System.out.println("Encrypted password: " + encrypt(password));
+        };
+    };
 }
