@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -25,8 +26,10 @@ import org.json.JSONObject;
 
 public class ProfileEdit extends AppCompatActivity {
 
-    EditText edit_nama, edit_notelp;
-    Button save;
+    private TextView edit_nama, edit_notelp;
+    private Button save;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,12 +69,11 @@ public class ProfileEdit extends AppCompatActivity {
         String userEmail = sharedPreferences.getString("email", "");
 
         // Construct the URL
-        String urlEndPoints = "https://ap-southeast-1.aws.data.mongodb-api.com/app/application-0-iyoxv/endpoint/editProfileByEmail?email=" + userEmail + "&username=" +updatedUsername + "&password=" + updatedNotelp;
+        String urlEndPoints = "https://ap-southeast-1.aws.data.mongodb-api.com/app/application-0-iyoxv/endpoint/editProfileByEmail?email=" + userEmail + "&username=" +updatedUsername + "&notelp=" + updatedNotelp;
 
         // Create a JSON object with the updated data
         JSONObject requestData = new JSONObject();
         try {
-            requestData.put("email", userEmail);
             requestData.put("username", updatedUsername);
             requestData.put("notelp", updatedNotelp);
         } catch (JSONException e) {
@@ -94,6 +96,9 @@ public class ProfileEdit extends AppCompatActivity {
                         editor.apply();
 
                         Toast.makeText(ProfileEdit.this, "Update Profile successful!", Toast.LENGTH_SHORT).show();
+
+                        //Update chatadapter
+
 
                         // Redirect to the profile page
                         Intent profileIntent = new Intent(ProfileEdit.this, ProfilePage.class);

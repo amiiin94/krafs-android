@@ -7,4 +7,10 @@
     </style>
 
     <style name="Theme.Krafs1" parent="Base.Theme.Krafs1" />
+    
+    <!--SplashScreen -->
+    <style name="SplashScreen" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowBackground">@drawable/logo_krafs</item>
+        <item name="android:statusBarColor"></item>
+    </style>
 </resources>

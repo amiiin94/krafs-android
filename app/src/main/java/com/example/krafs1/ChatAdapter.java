@@ -68,6 +68,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
+    public void updateUsername(String newUsername) {
+        this.username = newUsername;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return chatList.size();

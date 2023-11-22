@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,6 +36,7 @@ public class ForumDetail extends AppCompatActivity {
     private RecyclerView rvChat;
     private EditText message_input;
     private Button send;
+    private ImageView refresh_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,8 @@ public class ForumDetail extends AppCompatActivity {
 
         message_input = findViewById(R.id.message_input);
         send = findViewById(R.id.send);
+        refresh_btn = findViewById(R.id.refresh_btn);
+        message_input = findViewById(R.id.message_input);
 
         rvChat = findViewById(R.id.rvChat);
         rvChat.setLayoutManager(new GridLayoutManager(this, 1));
@@ -56,14 +61,19 @@ public class ForumDetail extends AppCompatActivity {
 
         chatList = new ArrayList<>();
 
-        message_input = findViewById(R.id.message_input);
-
-
         // Set an empty adapter
         ChatAdapter chatAdapter = new ChatAdapter(chatList, this);
         rvChat.setAdapter(chatAdapter);
 
         getAllChats();
+
+        //when click refresh btn
+        refresh_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getAllChats();
+            }
+        });
 
         //when click send
         send.setOnClickListener(new View.OnClickListener() {
@@ -129,6 +139,7 @@ public class ForumDetail extends AppCompatActivity {
             chatAdapter.updateChatList(chatList);
         }
     }
+
 
     public void sendMessage(String sender, String message) {
         // Modify the URL and parameters as needed

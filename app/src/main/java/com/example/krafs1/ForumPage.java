@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 public class ForumPage extends AppCompatActivity {
-    CardView forum;
+    CardView forum, chatbot;
 
     private LinearLayout homepage, navMerchant, navarticle, navprofile;
 
@@ -21,6 +21,7 @@ public class ForumPage extends AppCompatActivity {
         setContentView(R.layout.forum_page);
 
         forum = findViewById(R.id.forum);
+        chatbot = findViewById(R.id.chatbot);
 
         //navigation for bottom bar
         homepage = findViewById(R.id.homepage);
@@ -81,6 +82,21 @@ public class ForumPage extends AppCompatActivity {
                 } else {
                     Intent profileIntent = new Intent(ForumPage.this, ForumDetail.class);
                     startActivity(profileIntent);
+                }
+            }
+        });
+
+        chatbot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
+
+                if (sharedPreferences.getString("username", null) == null) {
+                    Intent loginIntent = new Intent(ForumPage.this, LoginPage.class);
+                    startActivity(loginIntent);
+                } else {
+                    Intent intent = new Intent(ForumPage.this, ChatbotPage.class);
+                    startActivity(intent);
                 }
             }
         });
