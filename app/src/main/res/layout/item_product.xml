@@ -8,11 +8,11 @@
     android:layout_margin="8dp">
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Product Kosong"
-        android:visibility="gone"
-        android:gravity="center"
-        android:id="@+id/tvEmpty"/>
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:id="@+id/tvEmpty"
+        android:textSize="20dp"
+        android:textStyle="bold"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

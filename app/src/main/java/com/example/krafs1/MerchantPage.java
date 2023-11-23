@@ -3,7 +3,6 @@ package com.example.krafs1;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -125,8 +124,8 @@ public class MerchantPage extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     // Panggil fungsi atau kode yang ingin Anda jalankan
-                    String isi2 = "vkbvkbewbfebfwl";
-                    Log.d("",isi2);
+                    String searchName = editTextText.getText().toString();
+                    getProductsByName(searchName);
                     return true;
 
                 }
@@ -343,4 +342,59 @@ public class MerchantPage extends AppCompatActivity {
 //    public void onCategoryItemClick(String categoryId) {
 //        getProductByCategory(categoryId);
 //    }
+
+    public void getProductsByName(String searchName) {
+        String url = "https://ap-southeast-1.aws.data.mongodb-api.com/app/application-0-iyoxv/endpoint/getProductByNama?name="+searchName;
+
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.GET,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONArray products = new JSONArray(response);
+
+                            productList.clear();
+
+                            for (int i = 0; i < products.length(); i++) {
+                                JSONObject productJson = products.getJSONObject(i);
+
+                                String idp = productJson.getString("_id");
+                                String nama = productJson.getString("name");
+                                int price = productJson.getInt("price");
+                                String formattedHarga = formatToRupiah(price);
+
+                                // Mengambil URL gambar
+                                JSONArray images = productJson.getJSONArray("images");
+                                String imgUrl = images.getString(0);
+
+                                Product product  = new Product (idp, nama, formattedHarga, imgUrl);
+                                productList.add(product);
+                            }
+                            displayProducts();
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    private String formatToRupiah(int value) {
+                        NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
+                        formatRupiah.setCurrency(Currency.getInstance("IDR"));
+
+                        String formattedValue = formatRupiah.format(value).replace("Rp", "").trim();
+
+                        return "Rp. " + formattedValue;
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(MerchantPage.this, error.toString().trim(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        requestQueue.add(stringRequest);
+    }
 }

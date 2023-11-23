@@ -2,6 +2,7 @@ package com.example.krafs1;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,17 +46,16 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        // Mendapatkan data dari dataset pada posisi tertentu
-        MerchantPage.Product product = productList.get(position);
 
         if (productList.isEmpty()) {
-            // Menetapkan data ke tampilan holder
             holder.tvEmpty.setVisibility(View.VISIBLE);
-            holder.tvId.setVisibility(View.GONE);
-            holder.tvProductName.setVisibility(View.GONE);
-            holder.tvProductPrice.setVisibility(View.GONE);
+            holder.tvEmpty.setText("Kosong");
+            holder.ivDetail.setVisibility(View.GONE);
         }else {
-            holder.tvEmpty.setVisibility(View.GONE);
+            MerchantPage.Product product = productList.get(position);
+            Log.d("onBindViewHolder: 321",productList.toString());
+            holder.tvEmpty.setVisibility(View.VISIBLE);
+            holder.tvEmpty.setText("kosong");
             holder.tvId.setText(product.getIdp());
             holder.tvProductName.setText(product.getName());
             holder.tvProductPrice.setText(product.getPrice());
@@ -79,7 +79,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return productList.size();
+        if (productList.isEmpty()) {
+            return 1;
+        } else {
+            return productList.size();
+        }
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
