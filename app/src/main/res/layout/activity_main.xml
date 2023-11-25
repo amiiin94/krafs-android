@@ -122,6 +122,7 @@
                         app:srcCompat="@drawable/chatbot" />
 
                     <Button
+                        android:id="@+id/chatbot_btn"
                         android:layout_width="97dp"
                         android:layout_height="36dp"
                         android:backgroundTint="@color/main_brown"

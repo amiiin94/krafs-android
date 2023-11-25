@@ -81,6 +81,7 @@ public class LoginPage extends AppCompatActivity {
 
                             JSONObject userJson = new JSONObject(response);
 
+                            String user_id = userJson.getString("_id");
                             String username = userJson.getString("username");
                             String email = userJson.getString("email");
                             String notelp = userJson.getString("notelp");
@@ -88,6 +89,7 @@ public class LoginPage extends AppCompatActivity {
                             // Store user data in SharedPreferences
                             SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
                             SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("user_id", user_id);
                             editor.putString("username", username);
                             editor.putString("email", email);
                             editor.putString("notelp", notelp);

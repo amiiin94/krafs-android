@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +44,7 @@ public class MerchantPage extends AppCompatActivity {
     private RecyclerView rv1;
     private RecyclerView rvButton;
     private EditText editTextText;
+    private ImageView cart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +74,18 @@ public class MerchantPage extends AppCompatActivity {
 
         AllMerch = findViewById(R.id.AllMerch);
 
+        cart = findViewById(R.id.cart);
+
         getAllProducts();
         getAllCategory();
+
+        cart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MerchantPage.this, CartPage.class);
+                startActivity(intent);
+            }
+        });
 
         homepage.setOnClickListener(new View.OnClickListener() {
             @Override

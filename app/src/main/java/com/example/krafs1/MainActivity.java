@@ -32,8 +32,9 @@ import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
+    //Make Variable
     private LinearLayout navMerchant, navarticle, navforum, navprofile;
-    private Button join_our_community;
+    private Button join_our_community, chatbot_btn;
     private TextView selamatDatang;
     private List<MerchantPage.Product> productList;
     private List<ArticlePage.Article> articleList;
@@ -45,28 +46,34 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Set an ID
         navMerchant = findViewById(R.id.navmerchant);
         navarticle = findViewById(R.id.navarticle);
         navprofile = findViewById(R.id.navprofile);
         navforum = findViewById(R.id.navforum);
+        join_our_community = findViewById(R.id.join_our_community);
+        chatbot_btn = findViewById(R.id.chatbot_btn);
 
+
+        //Set an Array List
         productList = new ArrayList<>();
         articleList = new ArrayList<>();
 
+        //Show Product List
         rvProduct = findViewById(R.id.rvProduct);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvProduct.setLayoutManager(layoutManager);
 
+        //Set Article List
         rvArticles = findViewById(R.id.rvArticles);
         LinearLayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvArticles.setLayoutManager(layoutManager2);
 
-        join_our_community = findViewById(R.id.join_our_community);
-
+        //Get data from Sharedpreference
         SharedPreferences sharedPreferences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
-
         String username = sharedPreferences.getString("username", "");
 
+        //Selamat datang logic
         TextView textSelamatDatang = findViewById(R.id.selamatDatang);
         if (!username.isEmpty()) {
             textSelamatDatang.setText("Hai " + username);
@@ -74,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
             textSelamatDatang.setText("Welcome to KRAFS");
         }
 
+        //When Click join_our_community ID
         join_our_community.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,6 +93,22 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     Intent profileIntent = new Intent(MainActivity.this, ForumDetail.class);
                     startActivity(profileIntent);
+                }
+            }
+        });
+
+        //When Click chatbot_btn id
+        chatbot_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
+
+                if (sharedPreferences.getString("username", null) == null) {
+                    Intent intent = new Intent(MainActivity.this, LoginPage.class);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(MainActivity.this, ChatbotPage.class);
+                    startActivity(intent);
                 }
             }
         });
@@ -134,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
         getAllArticles();
 
     }
+
     public void getAllProductsSortUpdate() {
         String urlEndPoints = "https://ap-southeast-1.aws.data.mongodb-api.com/app/application-0-iyoxv/endpoint/getProductsSortCreate";
 
@@ -158,7 +183,6 @@ public class MainActivity extends AppCompatActivity {
                                 String imgUrl = images.getString(0);
 
                                 // Menambahkan produk ke dalam productList
-//
                                 MerchantPage.Product product = new MerchantPage.Product(idp, nama, formattedHarga, imgUrl);
 
                                 productList.add(product);
@@ -171,7 +195,6 @@ public class MainActivity extends AppCompatActivity {
                     private String formatToRupiah(int value) {
                         NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
                         formatRupiah.setCurrency(Currency.getInstance("IDR"));
-
                         String formattedValue = formatRupiah.format(value).replace("Rp", "").trim();
 
                         return "Rp. " + formattedValue;
@@ -187,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         requestQueue.add(sr);
     }
+
     private void displayProducts() {
         ProductAdapterHome productAdapterHome = new ProductAdapterHome(productList);
         rvProduct.setAdapter(productAdapterHome);

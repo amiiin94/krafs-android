@@ -1,8 +1,11 @@
 package com.example.krafs1;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,35 +29,51 @@ import java.util.Currency;
 import java.util.Locale;
 
 public class ProductDetail extends AppCompatActivity {
-    TextView nama_produk, harga_produk, stok_produk, deskripsi_produk;
-    ImageView foto_produk;
-
+    private TextView nama_produk, harga_produk, stok_produk, deskripsi_produk;
+    private ImageView foto_produk;
+    private Button cart_btn;
+    private String user_id;
+    private ProductModel productModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.product_detail);
 
+        // Retrieve user_id from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
+        user_id = sharedPreferences.getString("user_id", user_id);
+
         // Menerima ID dari Intent
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("PRODUCT_ID")) {
             String productId = intent.getStringExtra("PRODUCT_ID");
 
-            // Sekarang, Anda dapat menggunakan cardId untuk menampilkan detail kartu yang sesuai
-            // ...
             foto_produk = findViewById(R.id.foto_produk);
             nama_produk = findViewById(R.id.nama_produk);
             harga_produk = findViewById(R.id.harga_produk);
             stok_produk = findViewById(R.id.stok_produk);
             deskripsi_produk = findViewById(R.id.deskripsi_produk);
-//            tvcontoh.setText("Product ID: " + productId);
+            cart_btn = findViewById(R.id.cart_btn);
+
             getProductById(productId);
         } else {
-            // Penanganan jika ID tidak diterima dengan benar
             Toast.makeText(this, "ID not found", Toast.LENGTH_SHORT).show();
-            finish(); // Anda mungkin ingin menutup aktivitas ini jika ID tidak ditemukan
+            finish();
         }
+
+        cart_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (productModel != null) {
+                    insertProductToCart(user_id, productModel);
+                } else {
+                    Toast.makeText(ProductDetail.this, "Product not loaded yet", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
+
     public void getProductById(String productId) {
         String url = "https://ap-southeast-1.aws.data.mongodb-api.com/app/application-0-iyoxv/endpoint/getProductById?id=" + productId;
 
@@ -68,38 +87,19 @@ public class ProductDetail extends AppCompatActivity {
                             JSONArray products = new JSONArray(response);
                             JSONObject productJson = products.getJSONObject(0);
 
-                            String idp = productJson.getString("_id");
-                            String name = productJson.getString("name");
-                            int price = productJson.getInt("price");
-                            String stock = productJson.getString("stock");
-                            String description = productJson.getString("description");
-                            String formattedHarga = formatToRupiah(price);
+                            // Initialize productModel with the product details
+                            productModel = new ProductModel(productJson);
+                            productModel.setId(productId); // Set the id received from the database
 
-                            // Mengambil URL gambar
-                            JSONArray images = productJson.getJSONArray("images");
-                            String imgUrl = images.getString(0);
+                            Picasso.get().load(productModel.getImageUrl()).into(foto_produk);
+                            nama_produk.setText(productModel.getName());
+                            harga_produk.setText(productModel.getFormattedPrice());
+                            stok_produk.setText("Stock: " + productModel.getStock() + " Pcs");
+                            deskripsi_produk.setText(productModel.getDescription());
 
-                            //taro data di id textview
-                            Picasso.get().load(imgUrl).into(foto_produk);
-                            nama_produk.setText(name);  // Use 'name' instead of 'formattedHarga'
-                            harga_produk.setText(formattedHarga);
-                            stok_produk.setText("Stock: " + stock + " Pcs");
-                            deskripsi_produk.setText(description);
-
-
-
-                        }
-                        catch (JSONException e) {
+                        } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                    }
-                    private String formatToRupiah(int value) {
-                        NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
-                        formatRupiah.setCurrency(Currency.getInstance("IDR"));
-
-                        String formattedValue = formatRupiah.format(value).replace("Rp", "").trim();
-
-                        return "Rp. " + formattedValue;
                     }
                 },
                 new Response.ErrorListener() {
@@ -109,7 +109,51 @@ public class ProductDetail extends AppCompatActivity {
                     }
                 }
         );
+
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         requestQueue.add(stringRequest);
+    }
+
+    public void insertProductToCart(String user_id, ProductModel productModel) {
+        String urlEndPoints = "https://ap-southeast-1.aws.data.mongodb-api.com/app/application-0-iyoxv/endpoint/insertProductToCartByUserId" +
+                "?user_id=" + user_id +
+                "&product_id=" + productModel.getId();
+
+        StringRequest sr = new StringRequest(
+                Request.Method.POST,
+                urlEndPoints,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+
+                            // Check if the response contains an error field
+                            if (jsonResponse.has("error")) {
+                                String errorMessage = jsonResponse.getString("error");
+                                // Display toast with the error message
+                                Toast.makeText(ProductDetail.this, errorMessage, Toast.LENGTH_SHORT).show();
+                            } else {
+                                // Registration successful
+                                Toast.makeText(ProductDetail.this, "Added Product to Cart!", Toast.LENGTH_SHORT).show();
+                                //Intent loginIntent = new Intent(ProductDetail.this, LoginPage.class);
+                                //startActivity(loginIntent);
+                            }
+                        } catch (JSONException e) {
+                            // Handle JSON parsing error
+                            e.printStackTrace();
+                            Toast.makeText(ProductDetail.this, "failed", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(ProductDetail.this, "Registration failed", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        requestQueue.add(sr);
     }
 }

@@ -119,10 +119,11 @@
                     android:background="@drawable/btn_bg"
                     android:textColor="@color/white"></com.google.android.material.button.MaterialButton>
                 <Button
+                    android:id="@+id/cart_btn"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="+ Chart"
+                    android:text="+ Cart"
                     android:layout_marginHorizontal="5dp"
                     android:background="@drawable/btn_bg"></Button>
             </LinearLayout>
