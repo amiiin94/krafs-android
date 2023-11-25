@@ -1,7 +1,6 @@
 package com.example.krafs1;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,10 +43,18 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         // Get data from the dataset at a certain position
         CartPage.Cart cart = cartList.get(position);
 
-        holder.tvId.setText(cart.getIdp());
-        holder.product_name.setText(cart.getProduct_name());
-        holder.product_price.setText(cart.getProduct_price());
-        holder.quantity.setText(String.valueOf(cart.getQuantity()));
+        if (holder.tvId != null) {
+            holder.tvId.setText(cart.getIdp());
+        }
+        if (holder.product_name != null) {
+            holder.product_name.setText(cart.getProduct_name());
+        }
+        if (holder.product_price != null) {
+            holder.product_price.setText(cart.getProduct_price());
+        }
+        if (holder.quantity != null) {
+            holder.quantity.setText(String.valueOf(cart.getQuantity()));
+        }
     }
 
     @Override

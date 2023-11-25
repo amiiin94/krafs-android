@@ -1,16 +1,13 @@
 package com.example.krafs1;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -23,14 +20,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
-import java.util.Locale;
 
 public class CartPage extends AppCompatActivity {
-    private RecyclerView rv;
+    private RecyclerView rvCart;
     private List<Cart> cartList;
     private String user_id;
     private String product_id;
@@ -45,11 +39,11 @@ public class CartPage extends AppCompatActivity {
         user_id = prefs.getString("user_id", "");
 
         // RecyclerView
-        rv = findViewById(R.id.rv);
-        rv.setLayoutManager(new GridLayoutManager(this, 1));
+        rvCart = findViewById(R.id.rvCart);
+        rvCart.setLayoutManager(new GridLayoutManager(this, 1));
         int horizontalSpace = getResources().getDimensionPixelSize(R.dimen.space_between_cards_horizontal);
         int verticalSpace = getResources().getDimensionPixelSize(R.dimen.space_between_cards_vertical);
-        rv.addItemDecoration(new SpaceItemDecoration(this, horizontalSpace, verticalSpace));
+        rvCart.addItemDecoration(new SpaceItemDecoration(this, horizontalSpace, verticalSpace));
 
         cartList = new ArrayList<>();
 
@@ -57,7 +51,7 @@ public class CartPage extends AppCompatActivity {
     }
 
     private void getProductByUserId() {
-        String urlEndPoints = "https://your-api-url.com/getCart?user_id=" + user_id;
+        String urlEndPoints = "https://ap-southeast-1.aws.data.mongodb-api.com/app/application-0-iyoxv/endpoint/getCartsByUserId?user_id=" + user_id;
 
         StringRequest sr = new StringRequest(
                 Request.Method.GET,
@@ -71,6 +65,7 @@ public class CartPage extends AppCompatActivity {
 
                             // Create a list to store all product_ids
                             List<String> productIds = new ArrayList<>();
+                            List<Integer> quantityList = new ArrayList<>();
 
                             for (int i = 0; i < carts.length(); i++) {
                                 JSONObject cartJson = carts.getJSONObject(i);
@@ -80,8 +75,20 @@ public class CartPage extends AppCompatActivity {
 
                                 // Store the product_id in the list
                                 productIds.add(product_id);
+                                quantityList.add(quantity);
+                                Log.d("ini cart : ", String.valueOf(quantity));
                             }
-                            getProductDetail(productIds);
+                            getProductDetail(productIds, quantityList, new CartCallback() {
+                                @Override
+                                public void onCartListReady(List<Cart> cartList) {
+                                    displayProducts(cartList);
+                                }
+
+                                @Override
+                                public void onError(String errorMessage) {
+                                    Toast.makeText(CartPage.this, "Error: " + errorMessage, Toast.LENGTH_SHORT).show();
+                                }
+                            });
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -101,9 +108,13 @@ public class CartPage extends AppCompatActivity {
         queue.add(sr);
     }
 
-    private void getProductDetail(List<String> productIds) {
-        for (String productId : productIds) {
-            String urlEndPoints = "https://ap-southeast-1.aws.data.mongodb-api.com/app/application-0-iyoxv/endpoint/getProductByMoreThanOneId?id=" + productId;
+    private void getProductDetail(List<String> productIds, List<Integer> quantityList, final CartCallback callback) {
+        for (int i = 0; i < productIds.size(); i++) {
+            final String product_id = productIds.get(i);
+            final int quantity = quantityList.get(i);
+
+            // Bangun URL untuk setiap ID produk
+            String urlEndPoints = "https://ap-southeast-1.aws.data.mongodb-api.com/app/application-0-iyoxv/endpoint/getProductByMoreThanOneId?id=" + product_id;
 
             StringRequest sr = new StringRequest(
                     Request.Method.GET,
@@ -111,24 +122,22 @@ public class CartPage extends AppCompatActivity {
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-
                             try {
-                                JSONArray carts = new JSONArray(response);
-                                for (int i = 0; i < carts.length(); i++) {
-                                    JSONObject cartJson = carts.getJSONObject(i);
+                                JSONArray products = new JSONArray(response);
+                                JSONObject productJson = products.getJSONObject(0);
 
-                                    String idp = cartJson.getString("_id");
-                                    String product_name = cartJson.getString("name");
-                                    String product_price = cartJson.getString("price");
-                                    int quantity = cartJson.getInt("quantity");
+                                String idp = productJson.getString("_id");
+                                String product_name = productJson.getString("name");
+                                String product_price = productJson.getString("price");
 
-                                    Cart cart = new Cart(idp, product_name, product_price, quantity);
-                                    cartList.add(cart);
+//                                int quantity =
+
+                                Cart cart = new Cart(idp, product_name, product_price, quantity);
+                                cartList.add(cart);
+
+                                if (cartList.size() == productIds.size()) {
+                                    callback.onCartListReady(cartList);
                                 }
-
-                                // Move the adapter creation and setting outside the loop
-                                CartAdapter cartAdapter = new CartAdapter(cartList);
-                                rv.setAdapter(cartAdapter);
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -143,10 +152,64 @@ public class CartPage extends AppCompatActivity {
                     }
             );
 
-            // Add the request to the RequestQueue.
+            // Tambahkan permintaan ke RequestQueue.
             RequestQueue queue = Volley.newRequestQueue(this);
             queue.add(sr);
         }
+        // Pindahkan pembuatan dan pengaturan adapter di luar loop jika ingin mengatur adapter setelah semua permintaan selesai
+        displayProducts(cartList);
+    }
+
+//    private int getProductQuantity (final QuantityCallback callback) {
+//        String urlEndPoints = "https://ap-southeast-1.aws.data.mongodb-api.com/app/application-0-iyoxv/endpoint/getCartsByUserId?user_id=" + user_id;
+//
+//        StringRequest sr = new StringRequest(
+//                Request.Method.GET,
+//                urlEndPoints,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//
+//                        try {
+//                            JSONArray carts = new JSONArray(response);
+//
+//                            // Create a list to store all product_ids
+//                            List<String> productIds = new ArrayList<>();
+//
+//                            for (int i = 0; i < carts.length(); i++) {
+//                                JSONObject cartJson = carts.getJSONObject(i);
+//
+//                                product_id = cartJson.getString("product_id");
+//                                int quantity = cartJson.getInt("quantity");
+//                            }
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        Toast.makeText(CartPage.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//        );
+//
+//        return quantity;
+//    }
+    private void displayProducts(List<Cart> cartList) {
+        CartAdapter cartAdapter = new CartAdapter(cartList);
+        rvCart.setAdapter(cartAdapter);
+    }
+
+//    public interface QuantityCallback {
+//        void onQuantityReady(int quantity);
+//        void onError(String errorMessage);
+//    }
+
+    public interface CartCallback {
+        void onCartListReady(List<Cart> cartList);
+        void onError(String errorMessage);
     }
 
 
