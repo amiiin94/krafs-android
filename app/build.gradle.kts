@@ -56,5 +56,7 @@ dependencies {
     implementation ("com.android.volley:volley:1.2.1")
     implementation ("com.squareup.picasso:picasso:2.71828")
     implementation ("org.mindrot:jbcrypt:0.4")
+    implementation ("com.sun.mail:javax.mail:1.6.2")
 
 }
+

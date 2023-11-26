@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.List;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
@@ -49,8 +51,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         if (holder.product_name != null) {
             holder.product_name.setText(cart.getProduct_name());
         }
+        // Format and set the product price
         if (holder.product_price != null) {
-            holder.product_price.setText(cart.getProduct_price());
+            double productPrice = parseAndFormatPrice(cart.getProduct_price());
+            holder.product_price.setText(formatCurrency(productPrice));
         }
         if (holder.quantity != null) {
             holder.quantity.setText(String.valueOf(cart.getQuantity()));
@@ -62,7 +66,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 int Qbelum = Integer.parseInt(holder.quantity.getText().toString());
                 int Qsudah = Qbelum + 1;
 
-//                cartPage.editQuantityByIdproduct(idcart,Qsudah);
+                // Update the quantity in the cartList
+                int position = holder.getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    updateQuantity(position, Qsudah);
+                }
+
                 // Menyiapkan Intent untuk berpindah ke aktivitas detail
                 holder.quantity.setText(String.valueOf(Qsudah));
             }
@@ -86,11 +95,47 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                     if (cartPage != null) {
                         cartPage.editQuantityByIdproduct(idcart, Qsudah);
                     }
+                    // Update the quantity in the cartList
+                    int position = holder.getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        updateQuantity(position, Qsudah);
+                    }
+
+                    // Update the quantity text in the ViewHolder
                     holder.quantity.setText(String.valueOf(Qsudah));
                 }
             }
         });
+    }
 
+    private double parseAndFormatPrice(String price) {
+        try {
+            // Parse the product price to double
+            return Double.parseDouble(price.replaceAll("[^\\d.]", ""));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return 0.0;
+        }
+    }
+
+    private String formatCurrency(double amount) {
+        // Format the amount as currency in Indonesian Rupiah (IDR)
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setCurrencySymbol("Rp");
+        symbols.setMonetaryDecimalSeparator(',');
+        symbols.setGroupingSeparator('.');
+
+        DecimalFormat format = new DecimalFormat("Rp #,###", symbols);
+
+        return format.format(amount);
+    }
+
+    // Add this method to update the quantity in cartList
+    public void updateQuantity(int position, int newQuantity) {
+        if (position >= 0 && position < cartList.size()) {
+            cartList.get(position).setQuantity(newQuantity);
+            notifyItemChanged(position);
+        }
     }
 
     @Override

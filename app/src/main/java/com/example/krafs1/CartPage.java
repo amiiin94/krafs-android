@@ -248,21 +248,22 @@ public class CartPage extends AppCompatActivity{
         public String getIdp() {
             return idp;
         }
-
         public String getProduct_name() {
             return product_name;
         }
-
         public String getProduct_price() {
             return product_price;
         }
-
         public int getQuantity() {
             return quantity;
         }
-
         public String getIdcart() {
             return idcart;
+        }
+
+        // Setter method for quantity
+        public void setQuantity(int quantity) {
+            this.quantity = quantity;
         }
     }
     public void editQuantityByIdproduct(String idcart, int quantity) {

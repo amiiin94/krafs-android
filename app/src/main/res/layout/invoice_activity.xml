@@ -11,7 +11,6 @@
         android:id="@+id/linearLayout"
         android:layout_width="408dp"
         android:layout_height="62dp"
-        android:background="@color/white"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -96,7 +95,7 @@
                     android:text="Total" />
 
                 <TextView
-                    android:id="@+id/textView8"
+                    android:id="@+id/total"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="14dp"
@@ -106,36 +105,21 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/textView9"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="14dp"
                 android:layout_marginTop="50dp"
-
                 android:text="Delivery Address"
                 android:textColor="@color/main_brown"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <TextView
+                android:id="@+id/address"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <EditText
-                    android:id="@+id/email2"
-                    android:layout_width="283dp"
-                    android:layout_height="43dp"
-                    android:layout_margin="20dp"
-                    android:background="@drawable/bget"
-                    android:hint="Enter Address..."
-                    android:padding="10dp"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/abu"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:text="address" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -202,40 +186,30 @@
                     android:src="@drawable/shopeepay_logo" />
             </LinearLayout>
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/textView10"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                android:textSize="12sp"
+                android:text="*Check your email for more detail information and payment confirmation" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/back_btn"
-                    android:layout_width="120dp"
-                    android:layout_height="51dp"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="15dp"
-                    android:layout_marginVertical="35dp"
-                    android:backgroundTint="@color/white"
-                    android:gravity="center"
-                    android:text="Back"
-                    android:textColor="@color/main_brown"
-                    android:textStyle="bold"
-                    app:strokeColor="@color/main_brown"
-                    app:strokeWidth="2dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/pay_now_btn2"
-                    android:layout_width="120dp"
-                    android:layout_height="51dp"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginVertical="35dp"
-                    android:backgroundTint="@color/main_brown"
-                    android:gravity="center"
-                    android:text="Pay Now"
-                    android:textColor="@color/white"
-                    android:textStyle="bold" />
-            </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/back_btn"
+                android:layout_width="120dp"
+                android:layout_height="51dp"
+                android:layout_gravity="end"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginVertical="35dp"
+                android:backgroundTint="@color/white"
+                android:gravity="center"
+                android:text="Main Menu"
+                android:textColor="@color/main_brown"
+                android:textStyle="bold"
+                app:strokeColor="@color/main_brown"
+                app:strokeWidth="2dp" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

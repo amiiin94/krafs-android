@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.splashscreen_activity);
 
         new Handler().postDelayed(new Runnable() {
             @Override

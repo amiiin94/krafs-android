@@ -26,13 +26,7 @@
             android:name=".CartPage"
             android:exported="false" />
         <activity
-            android:name=".Cart"
-            android:exported="false" />
-        <activity
             android:name=".ChatbotPage"
-            android:exported="false" />
-        <activity
-            android:name=".PurchasePage"
             android:exported="false" />
         <activity
             android:name=".ArticleDetail"
@@ -51,6 +45,9 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SplashScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

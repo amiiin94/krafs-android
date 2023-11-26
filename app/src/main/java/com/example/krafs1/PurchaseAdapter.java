@@ -41,7 +41,7 @@ public class PurchaseAdapter extends RecyclerView.Adapter<PurchaseAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return cartList.size();
+        return cartList != null ? cartList.size() : 0; // Add null check here
     }
 
     private String formatToRupiah(int value) {
