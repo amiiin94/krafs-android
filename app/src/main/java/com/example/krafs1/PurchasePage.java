@@ -49,11 +49,14 @@ public class PurchasePage extends AppCompatActivity {
         payNowBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 // Start InvoicePage activity
                 Intent invoiceIntent = new Intent(PurchasePage.this, InvoicePage.class);
                 invoiceIntent.putParcelableArrayListExtra("cartList", new ArrayList<>(cartList));
                 invoiceIntent.putExtra("addressKey", address.getText().toString());
                 startActivity(invoiceIntent);
+
+                sendEmail();
 
             }
         });
@@ -130,19 +133,32 @@ public class PurchasePage extends AppCompatActivity {
         // Build the email body
         StringBuilder emailBody = new StringBuilder();
         for (CartPage.Cart cartItem : cartList) {
-            emailBody.append("Product: ").append(cartItem.getProduct_name()).append("\n");
-            emailBody.append("Price: ").append(cartItem.getProduct_price()).append("\n");
-            emailBody.append("Quantity: ").append(cartItem.getQuantity()).append("\n");
-            emailBody.append("\n");
+            emailBody.append("Product: ").append(cartItem.getProduct_name()).append("<br>");
+            emailBody.append("Price: ").append( cartItem.getProduct_price()).append("<br>");
+            emailBody.append("Quantity: ").append(cartItem.getQuantity()).append("<br>");
+            emailBody.append("<br>");
         }
+
+        emailBody.append("Ongkos kirim: Rp 9.500").append("<br><br>");
 
         // Add total and delivery address
         double totalAmount = calculateTotal();
-        emailBody.append("Total: ").append(formatCurrency(totalAmount)).append("\n");
-        emailBody.append("Delivery Address: ").append(address.getText().toString()).append("\n\n");
+        emailBody.append("Total: ").append(formatCurrency(totalAmount + 9500)).append("<br>");
+        emailBody.append("Delivery Address: ").append(address.getText().toString()).append("<br><br>");
+
+        //bank and emoney
+        emailBody.append("Pembayaran bisa dilakukan pada nomor rekening dan nomor telepon berikut ini:").append("<br>");
+        emailBody.append("Bank BRI: 034101000743127 <br>");
+        emailBody.append("Bank BCA: 326201012057123 <br>");
+        emailBody.append("Bank BNI: 478201003567562 <br>");
+        emailBody.append("Bank Dana: 085156266406 <br>");
+        emailBody.append("Bank Gopay: 085156266406 <br>");
+        emailBody.append("Bank ShopeePay: 085156266406 <br><br>");
+
+        emailBody.append("Go to this <a href='https://forms.gle/uxEaH7NgoDJzw46TA'>link</a> for your payment confirmation. <br><br>");
 
         // Add any additional information or closing text
-        emailBody.append("Thank you for your purchase!\n");
+        emailBody.append("Thank you for your purchase!<br>");
 
         // Execute the SendMail AsyncTask
         SendMail sendMail = new SendMail(recipientEmail, subject, emailBody.toString());

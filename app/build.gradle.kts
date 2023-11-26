@@ -32,6 +32,12 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    androidComponents {
+        onVariants(selector().all(), { variant ->
+            variant.packaging.resources.excludes.add("META-INF/NOTICE.md")
+            variant.packaging.resources.excludes.add("META-INF/LICENSE.md")
+        })
+    }
 }
 
 dependencies {
@@ -56,7 +62,8 @@ dependencies {
     implementation ("com.android.volley:volley:1.2.1")
     implementation ("com.squareup.picasso:picasso:2.71828")
     implementation ("org.mindrot:jbcrypt:0.4")
-    implementation ("com.sun.mail:javax.mail:1.6.2")
+    implementation ("com.sun.mail:android-mail:1.6.7")
+    implementation ("com.sun.mail:android-activation:1.6.7")
 
 }
 

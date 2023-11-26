@@ -15,7 +15,7 @@ import javax.mail.internet.MimeMessage;
 
 public class SendMail extends AsyncTask<Void, Void, Void> {
     private final String username = "krafsteam@gmail.com";
-    private final String password = "krafs_team12345";
+    private final String password = "rgix votg akae xgrm";
     private String recipientEmail;
     private String subject;
     private String message;
@@ -47,6 +47,8 @@ public class SendMail extends AsyncTask<Void, Void, Void> {
             mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientEmail));
             mimeMessage.setSubject(subject);
             mimeMessage.setText(message);
+            mimeMessage.setContent(message, "text/html");
+
 
             Transport.send(mimeMessage);
 
