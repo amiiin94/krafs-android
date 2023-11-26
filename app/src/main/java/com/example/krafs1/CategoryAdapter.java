@@ -1,6 +1,7 @@
 package com.example.krafs1;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     private List<MerchantPage.Category> categoryList;
     private Context context;
     private MerchantPage merchantPage;
+    private TextView lastSelectedTextView;
+
 
     public CategoryAdapter(List<MerchantPage.Category> categoryList, MerchantPage merchantPage) {
         this.categoryList = categoryList;
@@ -54,8 +57,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             public void onClick(View view) {
                 String categoryId = category.getIdc();
                 merchantPage.getProductByCategory(categoryId);
+
+                ubahbg(holder.tvCategoryName);
             }
         });
+        if (lastSelectedTextView != holder.tvCategoryName) {
+            resetbg();
+        }
     }
     public int getItemCount() {
         return categoryList.size();
@@ -74,6 +82,17 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             // productAdapter = new ProductAdapter(); // Sesuaikan dengan nama adapter produk Anda
             // RecyclerView rvProducts = itemView.findViewById(R.id.rvProducts);
             // rvProducts.setAdapter(productAdapter);
+        }
+    }
+    private void ubahbg(TextView textView) {
+        resetbg();
+
+        textView.setBackgroundColor(Color.parseColor("#453325"));
+        lastSelectedTextView = textView;
+    }
+    private void resetbg() {
+        if (lastSelectedTextView != null) {
+            lastSelectedTextView.setBackgroundColor(Color.parseColor("#6B4C35"));
         }
     }
 }

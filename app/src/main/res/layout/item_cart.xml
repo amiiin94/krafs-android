@@ -16,6 +16,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:id="@+id/tvId"
+            android:layout_width="10dp"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:scrollHorizontally="true"
+            android:textColor="@android:color/background_dark"
+            android:textSize="15sp" />
         <CheckBox
             android:id="@+id/checklist"
             android:layout_width="wrap_content"

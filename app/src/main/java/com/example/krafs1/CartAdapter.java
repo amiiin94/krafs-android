@@ -14,8 +14,8 @@ import java.util.List;
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     private List<CartPage.Cart> cartList;
     private Context context;
-
-    public CartAdapter(List<CartPage.Cart> cartList) {
+    private CartPage cartPage;
+    public CartAdapter(List<CartPage.Cart> cartList, CartPage cartPage) {
         this.cartList = cartList;
     }
 
@@ -44,7 +44,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         CartPage.Cart cart = cartList.get(position);
 
         if (holder.tvId != null) {
-            holder.tvId.setText(cart.getIdp());
+            holder.tvId.setText(cart.getIdcart());
         }
         if (holder.product_name != null) {
             holder.product_name.setText(cart.getProduct_name());
@@ -55,6 +55,42 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         if (holder.quantity != null) {
             holder.quantity.setText(String.valueOf(cart.getQuantity()));
         }
+        holder.plus_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String idcart = holder.tvId.getText().toString();
+                int Qbelum = Integer.parseInt(holder.quantity.getText().toString());
+                int Qsudah = Qbelum + 1;
+
+//                cartPage.editQuantityByIdproduct(idcart,Qsudah);
+                // Menyiapkan Intent untuk berpindah ke aktivitas detail
+                holder.quantity.setText(String.valueOf(Qsudah));
+            }
+        });
+        holder.minus_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String idcart = holder.tvId.getText().toString();
+                int Qbelum = Integer.parseInt(holder.quantity.getText().toString());
+
+                if (Qbelum >= 2) {
+                    int Qsudah = Qbelum - 1;
+
+                    if (cartPage != null) {
+                        cartPage.editQuantityByIdproduct(idcart, Qsudah);
+                    }
+                    holder.quantity.setText(String.valueOf(Qsudah));
+                } else {
+                    int Qsudah = Qbelum - 0;
+
+                    if (cartPage != null) {
+                        cartPage.editQuantityByIdproduct(idcart, Qsudah);
+                    }
+                    holder.quantity.setText(String.valueOf(Qsudah));
+                }
+            }
+        });
+
     }
 
     @Override
@@ -68,6 +104,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         TextView product_name;
         TextView product_price;
         TextView quantity;
+        TextView plus_btn, minus_btn;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -77,6 +114,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             product_name = itemView.findViewById(R.id.product_name);
             product_price = itemView.findViewById(R.id.product_price);
             quantity = itemView.findViewById(R.id.quantity);
+            plus_btn = itemView.findViewById(R.id.plus_btn);
+            minus_btn = itemView.findViewById(R.id.minus_btn);
         }
     }
 }

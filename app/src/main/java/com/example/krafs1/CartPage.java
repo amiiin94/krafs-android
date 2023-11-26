@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -18,6 +17,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -28,7 +28,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CartPage extends AppCompatActivity {
+public class CartPage extends AppCompatActivity{
     private RecyclerView rvCart;
     private List<Cart> cartList;
     private String user_id;
@@ -42,7 +42,6 @@ public class CartPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cart_page);
-
 
         order_btn = findViewById(R.id.order_btn);
 
@@ -85,21 +84,23 @@ public class CartPage extends AppCompatActivity {
                             JSONArray carts = new JSONArray(response);
 
                             // Create a list to store all product_ids
+                            List<String> cartIds = new ArrayList<>();
                             List<String> productIds = new ArrayList<>();
                             List<Integer> quantityList = new ArrayList<>();
 
                             for (int i = 0; i < carts.length(); i++) {
                                 JSONObject cartJson = carts.getJSONObject(i);
 
+                                String cart_id = cartJson.getString("_id");
                                 product_id = cartJson.getString("product_id");
                                 int quantity = cartJson.getInt("quantity");
 
                                 // Store the product_id in the list
+                                cartIds.add(cart_id);
                                 productIds.add(product_id);
                                 quantityList.add(quantity);
-                                Log.d("ini cart : ", String.valueOf(quantity));
                             }
-                            getProductDetail(productIds, quantityList, new CartCallback() {
+                            getProductDetail(productIds, quantityList ,cartIds , new CartCallback() {
                                 @Override
                                 public void onCartListReady(List<Cart> cartList) {
                                     displayProducts(cartList);
@@ -129,10 +130,13 @@ public class CartPage extends AppCompatActivity {
         queue.add(sr);
     }
 
-    private void getProductDetail(List<String> productIds, List<Integer> quantityList, final CartCallback callback) {
+    private void getProductDetail(List<String> productIds, List<Integer> quantityList, List<String> cartIds, final CartCallback callback) {
+        int[] requestsCompleted = {0};
+
         for (int i = 0; i < productIds.size(); i++) {
             final String product_id = productIds.get(i);
             final int quantity = quantityList.get(i);
+            final String cartId = cartIds.get(i);
 
             // Bangun URL untuk setiap ID produk
             String urlEndPoints = "https://ap-southeast-1.aws.data.mongodb-api.com/app/application-0-iyoxv/endpoint/getProductByMoreThanOneId?id=" + product_id;
@@ -151,13 +155,15 @@ public class CartPage extends AppCompatActivity {
                                 String product_name = productJson.getString("name");
                                 String product_price = productJson.getString("price");
 
-//                                int quantity =
-
-                                Cart cart = new Cart(idp, product_name, product_price, quantity);
+                                Cart cart = new Cart(idp, product_name, product_price, quantity, cartId);
                                 cartList.add(cart);
 
-                                if (cartList.size() == productIds.size()) {
-                                    callback.onCartListReady(cartList);
+                                requestsCompleted[0]++;
+
+                                if (requestsCompleted[0] == productIds.size()) {
+                                    callback.onCartListReady((cartList));
+
+                                    displayProducts(cartList);
                                 }
 
                             } catch (JSONException e) {
@@ -178,55 +184,12 @@ public class CartPage extends AppCompatActivity {
             queue.add(sr);
         }
         // Pindahkan pembuatan dan pengaturan adapter di luar loop jika ingin mengatur adapter setelah semua permintaan selesai
-        displayProducts(cartList);
     }
 
-//    private int getProductQuantity (final QuantityCallback callback) {
-//        String urlEndPoints = "https://ap-southeast-1.aws.data.mongodb-api.com/app/application-0-iyoxv/endpoint/getCartsByUserId?user_id=" + user_id;
-//
-//        StringRequest sr = new StringRequest(
-//                Request.Method.GET,
-//                urlEndPoints,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//
-//                        try {
-//                            JSONArray carts = new JSONArray(response);
-//
-//                            // Create a list to store all product_ids
-//                            List<String> productIds = new ArrayList<>();
-//
-//                            for (int i = 0; i < carts.length(); i++) {
-//                                JSONObject cartJson = carts.getJSONObject(i);
-//
-//                                product_id = cartJson.getString("product_id");
-//                                int quantity = cartJson.getInt("quantity");
-//                            }
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Toast.makeText(CartPage.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//        );
-//
-//        return quantity;
-//    }
     private void displayProducts(List<Cart> cartList) {
-        CartAdapter cartAdapter = new CartAdapter(cartList);
+        CartAdapter cartAdapter = new CartAdapter(cartList,CartPage.this);
         rvCart.setAdapter(cartAdapter);
     }
-
-//    public interface QuantityCallback {
-//        void onQuantityReady(int quantity);
-//        void onError(String errorMessage);
-//    }
 
     public interface CartCallback {
         void onCartListReady(List<Cart> cartList);
@@ -239,12 +202,14 @@ public class CartPage extends AppCompatActivity {
         private String product_name;
         private String product_price;
         private int quantity;
+        private String idcart;
 
-        public Cart(String idp, String product_name, String product_price, int quantity) {
+        public Cart(String idp, String product_name, String product_price, int quantity, String idcart) {
             this.idp = idp;
             this.product_name = product_name;
             this.product_price = product_price;
             this.quantity = quantity;
+            this.idcart = idcart;
         }
 
         protected Cart(Parcel in) {
@@ -295,7 +260,43 @@ public class CartPage extends AppCompatActivity {
         public int getQuantity() {
             return quantity;
         }
+
+        public String getIdcart() {
+            return idcart;
+        }
     }
+    public void editQuantityByIdproduct(String idcart, int quantity) {
 
+        String url = "https://ap-southeast-1.aws.data.mongodb-api.com/app/application-0-iyoxv/endpoint/editQuantityByIdproduct?id=" +idcart+ "&quantity="+quantity;
 
+        JSONObject requestData = new JSONObject();
+        try {
+            requestData.put("quantity", quantity);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        // Create a JsonObjectRequest with PUT method
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.PUT,
+                url,
+                requestData,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Toast.makeText(CartPage.this, "Update Quantity successful!", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(CartPage.this, "Error Quantity profile: " + error.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        // Add the request to the request queue
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        requestQueue.add(jsonObjectRequest);
+    }
 }
