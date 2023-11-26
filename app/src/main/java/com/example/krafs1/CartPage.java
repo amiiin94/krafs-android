@@ -1,8 +1,13 @@
 package com.example.krafs1;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,11 +33,27 @@ public class CartPage extends AppCompatActivity {
     private List<Cart> cartList;
     private String user_id;
     private String product_id;
+    private Button order_btn;
+    public List<Cart> getProductData() {
+        return cartList;
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.cart_product);
+        setContentView(R.layout.cart_page);
+
+
+        order_btn = findViewById(R.id.order_btn);
+
+        order_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CartPage.this, PurchasePage.class);
+                intent.putExtra("cartList", new ArrayList<>(cartList));
+                startActivity(intent);
+            }
+        });
 
         // Get user_id from SharedPreferences
         SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
@@ -213,7 +234,7 @@ public class CartPage extends AppCompatActivity {
     }
 
 
-    static class Cart {
+    public static class Cart implements Parcelable {
         private String idp;
         private String product_name;
         private String product_price;
@@ -226,6 +247,39 @@ public class CartPage extends AppCompatActivity {
             this.quantity = quantity;
         }
 
+        protected Cart(Parcel in) {
+            idp = in.readString();
+            product_name = in.readString();
+            product_price = in.readString();
+            quantity = in.readInt();
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(idp);
+            dest.writeString(product_name);
+            dest.writeString(product_price);
+            dest.writeInt(quantity);
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        public static final Creator<Cart> CREATOR = new Creator<Cart>() {
+            @Override
+            public Cart createFromParcel(Parcel in) {
+                return new Cart(in);
+            }
+
+            @Override
+            public Cart[] newArray(int size) {
+                return new Cart[size];
+            }
+        };
+
+        // Getter methods
         public String getIdp() {
             return idp;
         }
@@ -242,4 +296,6 @@ public class CartPage extends AppCompatActivity {
             return quantity;
         }
     }
+
+
 }
