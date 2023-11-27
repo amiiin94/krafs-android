@@ -58,6 +58,7 @@ public class PurchasePage extends AppCompatActivity {
 
                 sendEmail();
 
+
             }
         });
 
@@ -163,6 +164,8 @@ public class PurchasePage extends AppCompatActivity {
         // Execute the SendMail AsyncTask
         SendMail sendMail = new SendMail(recipientEmail, subject, emailBody.toString());
         sendMail.execute();
+
+        Toast.makeText(PurchasePage.this, "See email for details", Toast.LENGTH_SHORT).show();
     }
 
 }

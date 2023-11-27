@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
@@ -50,7 +51,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         if (productList.isEmpty()) {
             holder.tvEmpty.setVisibility(View.VISIBLE);
             holder.tvEmpty.setText("Kosong");
-            holder.ivDetail.setVisibility(View.GONE);
+            holder.product_detail.setVisibility(View.GONE);
         }else {
             MerchantPage.Product product = productList.get(position);
             Log.d("onBindViewHolder: 321",productList.toString());
@@ -61,7 +62,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             holder.tvProductPrice.setText(product.getPrice());
             Picasso.get().load(product.getImageUrl()).into(holder.ivProductImage);
 
-            holder.ivDetail.setOnClickListener(new View.OnClickListener() {
+            holder.product_detail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     // Menyiapkan Intent untuk berpindah ke aktivitas detail
@@ -91,7 +92,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         TextView tvId;
         TextView tvProductName;
         TextView tvProductPrice;
-        ImageView ivDetail;
+        CardView product_detail;
         TextView tvEmpty;
 
         ViewHolder(View itemView) {
@@ -103,7 +104,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             tvId = itemView.findViewById(R.id.tvId);
             tvProductName = itemView.findViewById(R.id.tvProductName);
             tvProductPrice = itemView.findViewById(R.id.tvProductPrice);
-            ivDetail = itemView.findViewById(R.id.ivDetail);
+            product_detail = itemView.findViewById(R.id.product_detail);
         }
     }
 }

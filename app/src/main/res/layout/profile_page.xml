@@ -110,19 +110,13 @@
 
             <Button
                 android:id="@+id/cart_btn"
-                android:layout_width="50dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="14dp"
                 android:layout_weight="1"
                 android:backgroundTint="@color/main_brown"
                 android:text="Carts" />
 
-            <Button
-                android:id="@+id/invoice_btn"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Invoice" />
         </LinearLayout>
 
     </LinearLayout>
