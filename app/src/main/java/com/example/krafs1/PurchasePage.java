@@ -1,14 +1,8 @@
 package com.example.krafs1;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,15 +10,22 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.button.MaterialButton;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
-import java.util.Locale;
 
 public class PurchasePage extends AppCompatActivity {
     private RecyclerView rvPurchase;
@@ -57,7 +58,22 @@ public class PurchasePage extends AppCompatActivity {
                 startActivity(invoiceIntent);
 
                 sendEmail();
+                if (cartList != null) {
+                    for (int i = 0; i < cartList.size(); i++) {
+                        CartPage.Cart cart = cartList.get(i);
 
+                        // Dapatkan idp dari objek CartPage.Cart
+//                        String idp = cart.getIdp();
+                        String idc = cart.getIdcart();
+                        if (idc != null) {
+                            delete(idc);
+                        }else {
+                            String tes123 = "kosong bro 123 :";
+                            Log.d("",tes123);
+                        }
+                        // Lakukan sesuatu dengan idp, misalnya cetak ke log
+                    }
+                }
 
             }
         });
@@ -168,4 +184,32 @@ public class PurchasePage extends AppCompatActivity {
         Toast.makeText(PurchasePage.this, "See email for details", Toast.LENGTH_SHORT).show();
     }
 
+//    DELETE
+
+    public void delete(String cartId) {
+        String url = "https://ap-southeast-1.aws.data.mongodb-api.com/app/application-0-iyoxv/endpoint/deleteCartById?id=" + cartId;
+
+        // Create a StringRequest with DELETE method
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.DELETE,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Handle successful deletion, e.g., remove the item from the cartList
+                        // Update the RecyclerView
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(PurchasePage.this, "Error deleting item: " + error.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        // Add the request to the request queue
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        requestQueue.add(stringRequest);
+    }
 }

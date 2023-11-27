@@ -265,6 +265,7 @@ public class CartPage extends AppCompatActivity{
             product_name = in.readString();
             product_price = in.readString();
             quantity = in.readInt();
+            idcart = in.readString();
         }
 
         @Override
@@ -273,6 +274,7 @@ public class CartPage extends AppCompatActivity{
             dest.writeString(product_name);
             dest.writeString(product_price);
             dest.writeInt(quantity);
+            dest.writeString(idcart);
         }
 
         @Override
