@@ -34,11 +34,11 @@
             android:checked="false" />
 
         <ImageView
+            android:id="@+id/ivGambar"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="5dp"
-            android:src="@drawable/logo"
             android:gravity="center_vertical" />
 
         <RelativeLayout

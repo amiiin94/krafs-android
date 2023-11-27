@@ -4,10 +4,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -58,6 +61,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         }
         if (holder.quantity != null) {
             holder.quantity.setText(String.valueOf(cart.getQuantity()));
+        }
+        if (holder.ivGambar != null) {
+            Picasso.get().load(cart.getImageUrl()).into(holder.ivGambar);
         }
         holder.plus_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,6 +156,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         TextView product_price;
         TextView quantity;
         TextView plus_btn, minus_btn;
+        ImageView ivGambar;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -161,6 +168,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             quantity = itemView.findViewById(R.id.quantity);
             plus_btn = itemView.findViewById(R.id.plus_btn);
             minus_btn = itemView.findViewById(R.id.minus_btn);
+            ivGambar = itemView.findViewById(R.id.ivGambar);
         }
     }
 }

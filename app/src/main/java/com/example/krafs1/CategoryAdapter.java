@@ -59,6 +59,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 merchantPage.getProductByCategory(categoryId);
 
                 ubahbg(holder.tvCategoryName);
+                merchantPage.resetbgmerch();
             }
         });
         if (lastSelectedTextView != holder.tvCategoryName) {
@@ -77,20 +78,16 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvCategoryName = itemView.findViewById(R.id.tvCategoryName);
-            // ivCategoryImage = itemView.findViewById(R.id.ivCategoryImage);
-            // Jika ingin menampilkan produk di dalam kategori, Anda bisa menambahkannya di sini
-            // productAdapter = new ProductAdapter(); // Sesuaikan dengan nama adapter produk Anda
-            // RecyclerView rvProducts = itemView.findViewById(R.id.rvProducts);
-            // rvProducts.setAdapter(productAdapter);
+
         }
     }
-    private void ubahbg(TextView textView) {
+    public void ubahbg(TextView textView) {
         resetbg();
 
         textView.setBackgroundColor(Color.parseColor("#453325"));
         lastSelectedTextView = textView;
     }
-    private void resetbg() {
+    public void resetbg() {
         if (lastSelectedTextView != null) {
             lastSelectedTextView.setBackgroundColor(Color.parseColor("#6B4C35"));
         }

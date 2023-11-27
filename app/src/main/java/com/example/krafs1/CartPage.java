@@ -161,8 +161,10 @@ public class CartPage extends AppCompatActivity{
                                 String idp = productJson.getString("_id");
                                 String product_name = productJson.getString("name");
                                 String product_price = productJson.getString("price");
+                                JSONArray images = productJson.getJSONArray("images");
+                                String imgUrl = images.getString(0);
 
-                                Cart cart = new Cart(idp, product_name, product_price, quantity, cartId);
+                                Cart cart = new Cart(idp, product_name, product_price, quantity, cartId, imgUrl);
                                 cartList.add(cart);
 
                                 requestsCompleted[0]++;
@@ -248,13 +250,15 @@ public class CartPage extends AppCompatActivity{
         private String product_price;
         private int quantity;
         private String idcart;
+        private String imageUrl;
 
-        public Cart(String idp, String product_name, String product_price, int quantity, String idcart) {
+        public Cart(String idp, String product_name, String product_price, int quantity, String idcart, String imageUrl) {
             this.idp = idp;
             this.product_name = product_name;
             this.product_price = product_price;
             this.quantity = quantity;
             this.idcart = idcart;
+            this.imageUrl = imageUrl;
         }
 
         protected Cart(Parcel in) {
@@ -309,6 +313,10 @@ public class CartPage extends AppCompatActivity{
         // Setter method for quantity
         public void setQuantity(int quantity) {
             this.quantity = quantity;
+        }
+
+        public String getImageUrl() {
+            return imageUrl;
         }
     }
     public void editQuantityByIdproduct(String idcart, int quantity) {

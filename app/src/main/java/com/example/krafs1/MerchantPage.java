@@ -2,6 +2,7 @@ package com.example.krafs1;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -128,6 +129,7 @@ public class MerchantPage extends AppCompatActivity {
             public void onClick(View view) {
                 productList.clear();
                 getAllProducts();
+                AllMerch.setBackgroundColor(Color.parseColor("#453325"));
             }
         });
 
@@ -408,5 +410,8 @@ public class MerchantPage extends AppCompatActivity {
         );
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         requestQueue.add(stringRequest);
+    }
+    public void resetbgmerch() {
+        AllMerch.setBackgroundColor(Color.parseColor("#6B4C35"));
     }
 }
