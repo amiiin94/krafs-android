@@ -22,6 +22,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     private CartPage cartPage;
     public CartAdapter(List<CartPage.Cart> cartList, CartPage cartPage) {
         this.cartList = cartList;
+        this.cartPage = cartPage;
     }
 
     @NonNull
@@ -78,6 +79,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                     updateQuantity(position, Qsudah);
                 }
 
+                if (cartPage != null) {
+                    cartPage.editQuantityByIdproduct(idcart, Qsudah);
+                }
                 // Menyiapkan Intent untuk berpindah ke aktivitas detail
                 holder.quantity.setText(String.valueOf(Qsudah));
             }
@@ -110,6 +114,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                     // Update the quantity text in the ViewHolder
                     holder.quantity.setText(String.valueOf(Qsudah));
                 }
+            }
+        });
+        holder.delete_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String idp = cart.getIdp().toString();
+                String idcart = holder.tvId.getText().toString();
+                cartPage.delete(idp, idcart);
             }
         });
     }
@@ -156,7 +168,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         TextView product_price;
         TextView quantity;
         TextView plus_btn, minus_btn;
-        ImageView ivGambar;
+        ImageView ivGambar, delete_btn;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -169,6 +181,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             plus_btn = itemView.findViewById(R.id.plus_btn);
             minus_btn = itemView.findViewById(R.id.minus_btn);
             ivGambar = itemView.findViewById(R.id.ivGambar);
+            delete_btn = itemView.findViewById(R.id.delete_btn);
         }
     }
 }

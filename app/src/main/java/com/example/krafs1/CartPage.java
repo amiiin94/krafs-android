@@ -72,9 +72,6 @@ public class CartPage extends AppCompatActivity{
 
         getProductByUserId();
 
-        //delete function
-        delete_btn = findViewById(R.id.delete_btn);
-
     }
 
     private void getProductByUserId() {
@@ -200,8 +197,10 @@ public class CartPage extends AppCompatActivity{
         rvCart.setAdapter(cartAdapter);
     }
 
+//    DELETE
+
     public void delete(String productId, String cartId) {
-        String url = "https://your-api-url/deleteCartItem?id=" + cartId;
+        String url = "https://ap-southeast-1.aws.data.mongodb-api.com/app/application-0-iyoxv/endpoint/deleteCartById?id=" + cartId;
 
         // Create a StringRequest with DELETE method
         StringRequest stringRequest = new StringRequest(
