@@ -7,6 +7,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,11 +38,13 @@ public class CartPage extends AppCompatActivity{
     public List<Cart> getProductData() {
         return cartList;
     };
+    private ImageView delete_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cart_page);
+
 
         order_btn = findViewById(R.id.order_btn);
 
@@ -68,6 +71,10 @@ public class CartPage extends AppCompatActivity{
         cartList = new ArrayList<>();
 
         getProductByUserId();
+
+        //delete function
+        delete_btn = findViewById(R.id.delete_btn);
+
     }
 
     private void getProductByUserId() {
@@ -189,6 +196,44 @@ public class CartPage extends AppCompatActivity{
     private void displayProducts(List<Cart> cartList) {
         CartAdapter cartAdapter = new CartAdapter(cartList,CartPage.this);
         rvCart.setAdapter(cartAdapter);
+    }
+
+    public void delete(String productId, String cartId) {
+        String url = "https://your-api-url/deleteCartItem?id=" + cartId;
+
+        // Create a StringRequest with DELETE method
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.DELETE,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Handle successful deletion, e.g., remove the item from the cartList
+                        removeItemFromCartList(productId);
+                        // Update the RecyclerView
+                        displayProducts(cartList);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(CartPage.this, "Error deleting item: " + error.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        // Add the request to the request queue
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        requestQueue.add(stringRequest);
+    }
+
+    private void removeItemFromCartList(String productId) {
+        for (Cart cart : cartList) {
+            if (cart.getIdp().equals(productId)) {
+                cartList.remove(cart);
+                break;
+            }
+        }
     }
 
     public interface CartCallback {

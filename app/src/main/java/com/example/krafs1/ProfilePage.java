@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 public class ProfilePage extends AppCompatActivity {
     private LinearLayout homepage, navMerchant, navforum, navarticle;
-    private Button logout, edit_profile_btn;
+    private Button logout, edit_profile_btn, cart_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +27,7 @@ public class ProfilePage extends AppCompatActivity {
         navarticle = findViewById(R.id.navarticle);
         logout = findViewById(R.id.logout);
         edit_profile_btn = findViewById(R.id.edit_profile_btn);
+        cart_btn = findViewById(R.id.cart_btn);
 
         SharedPreferences sharedPreferences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
 
@@ -61,6 +62,14 @@ public class ProfilePage extends AppCompatActivity {
         } else {
             notelpTextView.setText("Default Notelp");
         }
+
+        cart_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ProfilePage.this, CartPage.class);
+                startActivity(intent);
+            }
+        });
 
         edit_profile_btn.setOnClickListener(new View.OnClickListener() {
             @Override

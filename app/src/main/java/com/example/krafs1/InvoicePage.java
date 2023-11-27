@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -19,7 +20,7 @@ import java.util.List;
 
 public class InvoicePage extends AppCompatActivity {
     private RecyclerView rvPurchase;
-    private MaterialButton payNowBtn, back_btn;
+    private MaterialButton main_menu;
     private List<CartPage.Cart> cartList;
     private String email;
     private TextView totalTextView;
@@ -30,6 +31,16 @@ public class InvoicePage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.invoice_activity);
+
+        // Main Menu Button
+        main_menu = findViewById(R.id.main_menu);
+        main_menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(InvoicePage.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // Receive product data from CartPage
         Intent intent = getIntent();
