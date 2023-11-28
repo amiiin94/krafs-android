@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/kombinebg"
+    android:background="@drawable/bgfix2"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30dp"
             android:layout_marginTop="50dp"
-            app:cardBackgroundColor="@color/abubg"
+            app:cardBackgroundColor="@color/abu2"
             app:cardCornerRadius="20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -28,7 +28,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:paddingVertical="20dp">
+                android:paddingVertical="20dp"
+                android:background="@color/abu2">
 
                 <ImageView
                     android:layout_width="60dp"
@@ -53,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30dp"
             android:layout_marginTop="20dp"
-            app:cardBackgroundColor="@color/abubg"
+            app:cardBackgroundColor="@color/abu2"
             app:cardCornerRadius="20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cv1"
@@ -62,7 +63,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:background="@color/abu2">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -117,7 +119,7 @@
 
                     <EditText
                         android:id="@+id/password"
-                        android:layout_width="250dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:layout_marginRight="5dp"
@@ -126,13 +128,6 @@
                         android:padding="10dp"
                         android:textColor="@color/black"
                         android:textColorHint="@color/abu"></EditText>
-
-                    <ImageButton
-                        android:layout_width="match_parent"
-                        android:layout_height="43dp"
-                        android:layout_marginTop="10dp"
-                        android:background="@drawable/bget"
-                        android:src="@drawable/baseline_visibility_24"></ImageButton>
                 </LinearLayout>
 
                 <com.google.android.material.button.MaterialButton
