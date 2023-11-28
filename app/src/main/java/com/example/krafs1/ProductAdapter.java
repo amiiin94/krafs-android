@@ -49,14 +49,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         if (productList.isEmpty()) {
+            holder.product_detail.setVisibility(View.VISIBLE);
             holder.tvEmpty.setVisibility(View.VISIBLE);
-            holder.tvEmpty.setText("Kosong");
-            holder.product_detail.setVisibility(View.GONE);
+            holder.tvEmpty.setText("Product not available");
         }else {
             MerchantPage.Product product = productList.get(position);
             Log.d("onBindViewHolder: 321",productList.toString());
-            holder.tvEmpty.setVisibility(View.VISIBLE);
-            holder.tvEmpty.setText("kosong");
+            holder.tvEmpty.setVisibility(View.GONE);
             holder.tvId.setText(product.getIdp());
             holder.tvProductName.setText(product.getName());
             holder.tvProductPrice.setText(product.getPrice());
