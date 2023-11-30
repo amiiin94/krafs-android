@@ -1,13 +1,14 @@
 package com.example.krafs1;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -15,24 +16,21 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.NumberFormat;
-import java.util.Currency;
-import java.util.Locale;
-
 public class ArticleDetail extends AppCompatActivity {
     TextView title, content;
-    ImageView image;
+    ImageView image, backArtikel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.article_detail_page);
+
+        backArtikel = findViewById(R.id.backArtikel);
 
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("ARTICLE_ID")) {
@@ -50,6 +48,13 @@ public class ArticleDetail extends AppCompatActivity {
             Toast.makeText(this, "ID not found", Toast.LENGTH_SHORT).show();
             finish(); // Anda mungkin ingin menutup aktivitas ini jika ID tidak ditemukan
         }
+        backArtikel.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent backArtikelIntent = new Intent(ArticleDetail.this, ArticlePage.class);
+                startActivity(backArtikelIntent);
+            }
+        }));
 
     }
 

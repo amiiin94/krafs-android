@@ -1,16 +1,15 @@
 package com.example.krafs1;
 
 import android.content.Context;
-import android.os.Bundle;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,7 +26,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class ForumDetail extends AppCompatActivity {
@@ -36,7 +34,7 @@ public class ForumDetail extends AppCompatActivity {
     private RecyclerView rvChat;
     private EditText message_input;
     private Button send;
-    private ImageView refresh_btn;
+    private ImageView refresh_btn, backForum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +44,7 @@ public class ForumDetail extends AppCompatActivity {
         message_input = findViewById(R.id.message_input);
         send = findViewById(R.id.send);
         refresh_btn = findViewById(R.id.refresh_btn);
+        backForum = findViewById(R.id.backForum);
         message_input = findViewById(R.id.message_input);
 
         rvChat = findViewById(R.id.rvChat);
@@ -74,6 +73,13 @@ public class ForumDetail extends AppCompatActivity {
                 getAllChats();
             }
         });
+        backForum.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent backForumIntent = new Intent(ForumDetail.this, ForumPage.class);
+                startActivity(backForumIntent);
+            }
+        }));
 
         //when click send
         send.setOnClickListener(new View.OnClickListener() {

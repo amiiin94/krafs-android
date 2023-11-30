@@ -11,11 +11,19 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:background="@color/main_brown">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/backCart"
+            android:src="@drawable/back"
+            android:layout_gravity="center"
+            android:layout_marginVertical="20dp"
+            android:layout_marginStart="20dp"></ImageView>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="CART"
-            android:layout_marginVertical="10dp"
+            android:layout_gravity="center"
             android:textSize="20dp"
             android:textColor="@color/white"
             android:textStyle="bold"

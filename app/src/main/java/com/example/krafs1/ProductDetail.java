@@ -28,7 +28,7 @@ import java.util.List;
 
 public class ProductDetail extends AppCompatActivity {
     private TextView nama_produk, harga_produk, stok_produk, deskripsi_produk;
-    private ImageView foto_produk;
+    private ImageView foto_produk, backProduct;
     private Button cart_btn;
     private String user_id;
     private ProductModel productModel;
@@ -38,6 +38,7 @@ public class ProductDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.product_detail);
 
+        backProduct = findViewById(R.id.backProduct);
         // Retrieve user_id from SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
         user_id = sharedPreferences.getString("user_id", user_id);
@@ -70,6 +71,13 @@ public class ProductDetail extends AppCompatActivity {
                 }
             }
         });
+        backProduct.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent backProductIntent = new Intent(ProductDetail.this, MerchantPage.class);
+                startActivity(backProductIntent);
+            }
+        }));
     }
 
     private void getCartByUserId() {

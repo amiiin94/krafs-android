@@ -41,7 +41,7 @@ public class CartPage extends AppCompatActivity{
     public List<Cart> getProductData() {
         return cartList;
     };
-    private ImageView delete_btn;
+    private ImageView backCart;
     private TextView tvTotalHarga;
 
     @Override
@@ -49,6 +49,7 @@ public class CartPage extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cart_page);
 
+        backCart = findViewById(R.id.backCart);
 
         order_btn = findViewById(R.id.order_btn);
 
@@ -62,6 +63,13 @@ public class CartPage extends AppCompatActivity{
                 startActivity(intent);
             }
         });
+        backCart.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent backCartIntent = new Intent(CartPage.this, MerchantPage.class);
+                startActivity(backCartIntent);
+            }
+        }));
 
         // Get user_id from SharedPreferences
         SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
