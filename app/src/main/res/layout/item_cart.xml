@@ -69,12 +69,27 @@
                     android:textColor="@android:color/background_dark"
                     android:textSize="15sp" />
 
-
-
                 <TextView
                     android:id="@+id/product_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="30dp"
+                    android:ellipsize="marquee"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:freezesText="true"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:textColor="@android:color/background_dark"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/totalHarga"
                     android:layout_alignParentBottom="true"
                     android:layout_marginBottom="10dp"
                     android:ellipsize="marquee"
@@ -84,10 +99,9 @@
                     android:marqueeRepeatLimit="marquee_forever"
                     android:scrollHorizontally="true"
                     android:singleLine="true"
-                    android:text="Rs 20"
                     android:textColor="@android:color/background_dark"
                     android:textSize="15sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold" ></TextView>
 
                 <TextView
                     android:id="@+id/minus_btn"

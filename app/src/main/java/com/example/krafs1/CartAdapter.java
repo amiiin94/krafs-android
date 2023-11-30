@@ -84,6 +84,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 }
                 // Menyiapkan Intent untuk berpindah ke aktivitas detail
                 holder.quantity.setText(String.valueOf(Qsudah));
+                updateTotalHarga(holder);
             }
         });
         holder.minus_btn.setOnClickListener(new View.OnClickListener() {
@@ -99,6 +100,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                         cartPage.editQuantityByIdproduct(idcart, Qsudah);
                     }
                     holder.quantity.setText(String.valueOf(Qsudah));
+                    updateTotalHarga(holder);
                 } else {
                     int Qsudah = Qbelum - 0;
 
@@ -113,6 +115,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
                     // Update the quantity text in the ViewHolder
                     holder.quantity.setText(String.valueOf(Qsudah));
+                    updateTotalHarga(holder);
                 }
             }
         });
@@ -124,6 +127,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 cartPage.delete(idp, idcart);
             }
         });
+        updateTotalHarga(holder);
     }
 
     private double parseAndFormatPrice(String price) {
@@ -156,6 +160,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         }
     }
 
+    private void updateTotalHarga(ViewHolder holder) {
+        double harga = parseAndFormatPrice(holder.product_price.getText().toString());
+        int banyak = Integer.parseInt(holder.quantity.getText().toString());
+        double total = harga * banyak;
+        String total2 = "Rp "+total+"00";
+        holder.totalHarga.setText(total2);
+    }
+
     @Override
     public int getItemCount() {
         // Check if the cartList is null or empty
@@ -167,7 +179,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         TextView product_name;
         TextView product_price;
         TextView quantity;
-        TextView plus_btn, minus_btn;
+        TextView plus_btn, minus_btn, totalHarga;
         ImageView ivGambar, delete_btn;
 
         ViewHolder(View itemView) {
@@ -182,6 +194,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             minus_btn = itemView.findViewById(R.id.minus_btn);
             ivGambar = itemView.findViewById(R.id.ivGambar);
             delete_btn = itemView.findViewById(R.id.delete_btn);
+            totalHarga = itemView.findViewById(R.id.totalHarga);
         }
     }
 }

@@ -3,7 +3,6 @@ package com.example.krafs1;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -24,9 +23,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.NumberFormat;
-import java.util.Currency;
-import java.util.Locale;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProductDetail extends AppCompatActivity {
     private TextView nama_produk, harga_produk, stok_produk, deskripsi_produk;
@@ -72,6 +70,61 @@ public class ProductDetail extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void getCartByUserId() {
+        String urlEndPoints = "https://ap-southeast-1.aws.data.mongodb-api.com/app/application-0-iyoxv/endpoint/getCartsByUserId?user_id=" + user_id;
+
+        StringRequest sr = new StringRequest(
+                Request.Method.GET,
+                urlEndPoints,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+                            JSONArray carts = new JSONArray(response);
+
+                            // Create a list to store all product_ids
+                            List<String> cartIds = new ArrayList<>();
+                            List<String> productIds = new ArrayList<>();
+                            List<Integer> quantityList = new ArrayList<>();
+
+                            for (int i = 0; i < carts.length(); i++) {
+                                JSONObject cartJson = carts.getJSONObject(i);
+
+                                String cart_id = cartJson.getString("_id");
+                                String product_id = cartJson.getString("product_id");
+                                int quantity = cartJson.getInt("quantity");
+
+                                // Store the product_id in the list
+                                cartIds.add(cart_id);
+                                productIds.add(product_id);
+                                quantityList.add(quantity);
+                            }
+//                            getCartByUserId(productIds, quantityList ,cartIds , new CartPage.CartCallback() {
+//                                @Override
+//                                public void onError(String errorMessage) {
+//                                    Toast.makeText(ProductDetail.this, "Error: " + errorMessage, Toast.LENGTH_SHORT).show();
+//                                }
+//                            });
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(ProductDetail.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        // Add the request to the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(sr);
     }
 
     public void getProductById(String productId) {

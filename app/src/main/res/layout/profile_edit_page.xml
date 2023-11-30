@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="30dp"
         android:layout_marginTop="60dp"
-        app:cardBackgroundColor="@color/abu"
+        app:cardBackgroundColor="@color/main_brown"
         app:cardCornerRadius="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +33,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:backgroundTint="@color/abu">
 
             <TextView
                 android:layout_width="match_parent"
@@ -41,7 +42,7 @@
                 android:layout_marginTop="50dp"
                 android:text="Edit Profile"
                 android:textAlignment="center"
-                android:textColor="@color/main_brown"
+                android:textColor="@color/white"
                 android:textSize="30dp"
                 android:textStyle="bold" />
 

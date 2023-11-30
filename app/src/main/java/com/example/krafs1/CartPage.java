@@ -8,6 +8,7 @@ import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +27,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +42,7 @@ public class CartPage extends AppCompatActivity{
         return cartList;
     };
     private ImageView delete_btn;
+    private TextView tvTotalHarga;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +51,8 @@ public class CartPage extends AppCompatActivity{
 
 
         order_btn = findViewById(R.id.order_btn);
+
+        tvTotalHarga = findViewById(R.id.tvTotalHarga);
 
         order_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,6 +114,7 @@ public class CartPage extends AppCompatActivity{
                                 @Override
                                 public void onCartListReady(List<Cart> cartList) {
                                     displayProducts(cartList);
+                                    totalHarga(cartList);
                                 }
 
                                 @Override
@@ -213,6 +220,7 @@ public class CartPage extends AppCompatActivity{
                         removeItemFromCartList(productId);
                         // Update the RecyclerView
                         displayProducts(cartList);
+                        totalHarga(cartList);
                     }
                 },
                 new Response.ErrorListener() {
@@ -340,12 +348,13 @@ public class CartPage extends AppCompatActivity{
                     @Override
                     public void onResponse(JSONObject response) {
                         Toast.makeText(CartPage.this, "Update Quantity successful!", Toast.LENGTH_SHORT).show();
+                        updateQuantityInCartList(idcart, quantity);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(CartPage.this, "Error Quantity profile: " + error.toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CartPage.this, "Error Quantity update: " + error.toString(), Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -353,5 +362,51 @@ public class CartPage extends AppCompatActivity{
         // Add the request to the request queue
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         requestQueue.add(jsonObjectRequest);
+    }
+
+    private void updateQuantityInCartList(String idcart, int newQuantity) {
+        for (Cart cart : cartList) {
+            if (cart.getIdcart().equals(idcart)) {
+                cart.setQuantity(newQuantity);
+                break;
+            }
+        }
+        displayProducts(cartList);
+        totalHarga(cartList);
+    }
+
+    public void totalHarga(List<Cart> cartList) {
+        double totalHarga = 0;
+
+        for (Cart cart : cartList) {
+            double harga = parseAndFormatPrice(cart.getProduct_price());
+            int banyak = cart.getQuantity();
+            totalHarga += (harga * banyak);
+        }
+        updateTotalHargaView(totalHarga);
+    }
+    public void updateTotalHargaView(double totalHarga) {
+        tvTotalHarga.setText("Total Harga : "+formatCurrency(totalHarga));
+    }
+    private double parseAndFormatPrice(String price) {
+        try {
+            // Parse the product price to double
+            return Double.parseDouble(price.replaceAll("[^\\d.]", ""));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return 0.0;
+        }
+    }
+
+    private String formatCurrency(double amount) {
+        // Format the amount as currency in Indonesian Rupiah (IDR)
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setCurrencySymbol("Rp");
+        symbols.setMonetaryDecimalSeparator(',');
+        symbols.setGroupingSeparator('.');
+
+        DecimalFormat format = new DecimalFormat("Rp #,###", symbols);
+
+        return format.format(amount);
     }
 }
