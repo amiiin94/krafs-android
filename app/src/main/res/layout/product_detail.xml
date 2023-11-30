@@ -40,7 +40,8 @@
                         android:id="@+id/backProduct"
                         android:layout_gravity="center"
                         android:padding="5dp"
-                        android:src="@drawable/merch_icon"></ImageView>
+                        android:layout_marginStart="3dp"
+                        android:src="@drawable/back_black"></ImageView>
                 </androidx.cardview.widget.CardView>
 
 
